@@ -46,6 +46,9 @@ class RestaurantControllerTest {
                 ))
                 .andExpect(content().string(
                         containsString("\"name\":\"Bab Zip\"")
+                ))
+                .andExpect(content().string(
+                        containsString("KimChi")
                 ));
 
         mvc.perform(get("/restaurants/2023"))
