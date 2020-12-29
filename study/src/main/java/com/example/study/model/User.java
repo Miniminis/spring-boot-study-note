@@ -1,6 +1,7 @@
 package com.example.study.model;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,6 +10,7 @@ import javax.persistence.Id;
 import java.time.LocalDateTime;
 
 @Data
+@NoArgsConstructor      //-default constructor
 @Entity     //==table
 public class User {
 
