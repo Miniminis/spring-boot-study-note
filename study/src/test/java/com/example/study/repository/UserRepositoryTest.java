@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
+import javax.jws.soap.SOAPBinding;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -20,28 +21,47 @@ public class UserRepositoryTest extends StudyApplicationTests {
     public void create() {
         User user = new User();
 //        user.setId();     //AI
-        user.setAccount("Tester03");
-        user.setEmail("Tester03@test.com");
+        user.setAccount("Tester985");
+        user.setEmail("Tester06@test.com");
         user.setPhoneNumber("010-7773-8888");
         user.setCreatedAt(LocalDateTime.now());
-        user.setCreatedBy("Tester03");
+        user.setCreatedBy("Tester06");
 
         User newUser = userRepository.save(user);
         System.out.println(newUser);        //lombok @Data's toString()
     }
 
     @Test
+    @Transactional
     public void read() {
-        Optional<User> selectedUser = userRepository.findById(2L);  //Optional : 있을수도 있고, 없을수도 있다.
+        Optional<User> selectedUser = userRepository.findById(8L);  //Optional : 있을수도 있고, 없을수도 있다.
 
 //        selectedUser.ifPresent(user -> {
 //            System.out.println(user);
 //        });
 
-        selectedUser.ifPresent(System.out::println);
-
+//        selectedUser.ifPresent(System.out::println);
         /*Hibernate: select user0_.id as id1_0_0_, user0_.account as account2_0_0_, user0_.created_at as created_3_0_0_, user0_.created_by as created_4_0_0_, user0_.email as email5_0_0_, user0_.phone_number as phone_nu6_0_0_, user0_.updated_at as updated_7_0_0_, user0_.updated_by as updated_8_0_0_ from user user0_ where user0_.id=?
         User(id=2, account=Tester02, email=Tester02@test.com, phoneNumber=010-7772-8888, createdAt=2020-12-30T00:00, createdBy=Tester02, updatedAt=null, updatedBy=null)*/
+
+        selectedUser.ifPresent(user -> {
+            user.getOrderDetails().stream().forEach(orderDetail -> {
+                System.out.println(orderDetail.getItem());
+            });
+        });
+
+        //Hibernate: select user0_.id as id1_2_0_, user0_.account as account2_2_0_, user0_.created_at as created_3_2_0_, user0_.created_by as created_4_2_0_, user0_.email as email5_2_0_, user0_.phone_number as phone_nu6_2_0_, user0_.updated_at as updated_7_2_0_, user0_.updated_by as updated_8_2_0_ from user user0_ where user0_.id=?
+        //failed to lazily initialize a collection of role: com.example.study.model.User.orderDetails, could not initialize proxy - no Session
+    }
+
+    @Test
+    @Transactional
+    public void readWithParam() {
+        Optional<User> user = userRepository.findByAccount("Tester153");
+//        Assertions.assertTrue(user.isPresent());
+        user.ifPresent(mUser -> {
+            System.out.println("*************************"+mUser);
+        });
     }
 
     @Test

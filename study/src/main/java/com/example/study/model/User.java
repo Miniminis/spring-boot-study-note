@@ -3,11 +3,9 @@ package com.example.study.model;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @NoArgsConstructor      //-default constructor
@@ -31,5 +29,8 @@ public class User {
     private LocalDateTime updatedAt;
 
     private String updatedBy;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    private List<OrderDetail> orderDetails;
 
 }
