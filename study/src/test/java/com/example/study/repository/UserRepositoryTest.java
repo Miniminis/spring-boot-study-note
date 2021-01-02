@@ -1,14 +1,12 @@
 package com.example.study.repository;
 
 import com.example.study.StudyApplicationTests;
-import com.example.study.model.User;
+import com.example.study.model.entity.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
 
-import javax.jws.soap.SOAPBinding;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -20,14 +18,16 @@ public class UserRepositoryTest extends StudyApplicationTests {
     @Test
     public void create() {
         User user = new User();
-//        user.setId();     //AI
-        user.setAccount("Tester985");
-        user.setEmail("Tester06@test.com");
-        user.setPhoneNumber("010-7773-8888");
+        user.setAccount("Tester1");
+        user.setPassword("1234");
+        user.setStatus("U");
+        user.setEmail("Tester1@test.com");
+        user.setRegisteredAt(LocalDateTime.now());
         user.setCreatedAt(LocalDateTime.now());
-        user.setCreatedBy("Tester06");
+        user.setCreatedBy("TestServer");
 
         User newUser = userRepository.save(user);
+        Assertions.assertNotNull(newUser);
         System.out.println(newUser);        //lombok @Data's toString()
     }
 
@@ -44,11 +44,11 @@ public class UserRepositoryTest extends StudyApplicationTests {
         /*Hibernate: select user0_.id as id1_0_0_, user0_.account as account2_0_0_, user0_.created_at as created_3_0_0_, user0_.created_by as created_4_0_0_, user0_.email as email5_0_0_, user0_.phone_number as phone_nu6_0_0_, user0_.updated_at as updated_7_0_0_, user0_.updated_by as updated_8_0_0_ from user user0_ where user0_.id=?
         User(id=2, account=Tester02, email=Tester02@test.com, phoneNumber=010-7772-8888, createdAt=2020-12-30T00:00, createdBy=Tester02, updatedAt=null, updatedBy=null)*/
 
-        selectedUser.ifPresent(user -> {
-            user.getOrderDetails().stream().forEach(orderDetail -> {
-                System.out.println(orderDetail.getItem());
-            });
-        });
+//        selectedUser.ifPresent(user -> {
+//            user.getOrderDetails().stream().forEach(orderDetail -> {
+//                System.out.println(orderDetail.getItem());
+//            });
+//        });
 
         //Hibernate: select user0_.id as id1_2_0_, user0_.account as account2_2_0_, user0_.created_at as created_3_2_0_, user0_.created_by as created_4_2_0_, user0_.email as email5_2_0_, user0_.phone_number as phone_nu6_2_0_, user0_.updated_at as updated_7_2_0_, user0_.updated_by as updated_8_2_0_ from user user0_ where user0_.id=?
         //failed to lazily initialize a collection of role: com.example.study.model.User.orderDetails, could not initialize proxy - no Session

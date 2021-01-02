@@ -1,11 +1,13 @@
 package com.example.study.repository;
 
 import com.example.study.StudyApplicationTests;
-import com.example.study.model.Item;
+import com.example.study.model.entity.Item;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 
@@ -17,15 +19,20 @@ public class ItemRepositoryTest extends StudyApplicationTests {
     @Test
     public void create() {
         Item item = new Item();
-        item.setName("엘지 노트북");
-        item.setPrice(1000000);
+        item.setStatus("W");
+        item.setName("LG 그램 2021년 형");
+        item.setTitle("[신년세일] LG 그램 2021년 형");
         item.setContent("최고급 사양에 대박 가격");
+        item.setPrice(BigDecimal.valueOf(1000000));
+        item.setBrandName("LG");
+        item.setRegisteredAt(LocalDateTime.now());
+        item.setCreatedAt(LocalDateTime.now());
+        item.setCreatedBy("TestServer");
+        item.setPartnerId(1L);
 
-        itemRepository.save(item);
-        Assertions.assertNotNull(item);
+        Item newItem = itemRepository.save(item);
+        Assertions.assertNotNull(newItem);
     }
-
-    //Hibernate: insert into item (content, name, price) values (?, ?, ?)
 
     @Test
     public void read() {

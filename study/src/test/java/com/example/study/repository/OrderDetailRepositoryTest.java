@@ -1,11 +1,12 @@
 package com.example.study.repository;
 
 import com.example.study.StudyApplicationTests;
-import com.example.study.model.OrderDetail;
+import com.example.study.model.entity.OrderDetail;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -18,15 +19,19 @@ public class OrderDetailRepositoryTest extends StudyApplicationTests {
     public void create() {
 
         OrderDetail order = new OrderDetail();
+        order.setStatus("R");
+        order.setArrivalDate(LocalDateTime.now());
+        order.setQuantity(3);
+        order.setTotalPrice(BigDecimal.valueOf(200000));
+        order.setCreatedAt(LocalDateTime.now());
+        order.setCreatedBy("TestServer");
 
-        order.setOrderAt(LocalDateTime.now());
-//        order.setUserId(8L);
-//        order.setItemId(5L);
+        order.setItemId(1L);
+        order.setOrderGroupId(1L);
 
-        OrderDetail createdOrder = orderDetailRepository.save(order);
-        Assertions.assertNotNull(createdOrder);
+        OrderDetail newOrderDetail = orderDetailRepository.save(order);
+        Assertions.assertNotNull(newOrderDetail);
     }
-    //Hibernate: insert into order_detail (item_id, order_at, user_id) values (?, ?, ?)
 
     @Test
     public void read() {
