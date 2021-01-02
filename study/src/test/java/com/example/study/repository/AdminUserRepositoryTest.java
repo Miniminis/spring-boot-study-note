@@ -16,13 +16,13 @@ public class AdminUserRepositoryTest extends StudyApplicationTests {
     @Test
     public void create() {
         AdminUser adminUser = new AdminUser();
-        adminUser.setAccount("TestAdmin1");
-        adminUser.setPassword("1234");
-        adminUser.setStatus("U");
+        adminUser.setAccount("TestAdmin2");
+        adminUser.setPassword("56789");
+        adminUser.setStatus("R");
         adminUser.setRole("Admin");
         adminUser.setRegisteredAt(LocalDateTime.now());
-        adminUser.setCreatedAt(LocalDateTime.now());
-        adminUser.setCreatedBy("TestServer");
+//        adminUser.setCreatedAt(LocalDateTime.now());
+//        adminUser.setCreatedBy("TestServer");
 
         AdminUser newAdminUser = adminUserRepository.save(adminUser);
         Assertions.assertNotNull(newAdminUser);

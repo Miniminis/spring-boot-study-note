@@ -17,14 +17,25 @@ public class UserRepositoryTest extends StudyApplicationTests {
 
     @Test
     public void create() {
-        User user = new User();
-        user.setAccount("Tester2");
-        user.setPassword("5678");
-        user.setStatus("U");
-        user.setEmail("Tester2@test.com");
-        user.setRegisteredAt(LocalDateTime.now());
-        user.setCreatedAt(LocalDateTime.now());
-        user.setCreatedBy("TestServer");
+//        User user = new User();
+//        user.setAccount("Tester2");
+//        user.setPassword("5678");
+//        user.setStatus("U");
+//        user.setEmail("Tester2@test.com");
+//        user.setRegisteredAt(LocalDateTime.now());
+//        user.setCreatedAt(LocalDateTime.now());
+//        user.setCreatedBy("TestServer");
+
+        /* Builder Pattern */
+        User user = User.builder()
+                .account("Tester3")
+                .password("9999")
+                .status("R")
+                .email("Tester3@gmail.com")
+                .registeredAt(LocalDateTime.now())
+                .createdAt(LocalDateTime.now())
+                .createdBy("TestServer")
+                .build();
 
         User newUser = userRepository.save(user);
         Assertions.assertNotNull(newUser);
@@ -45,7 +56,20 @@ public class UserRepositoryTest extends StudyApplicationTests {
                 orderGroup.getOrderDetails().stream().forEach(orderDetail -> {
                     System.out.println(orderDetail.getId());
                     System.out.println(orderDetail.getTotalPrice());
+
+                    System.out.println("===============Order Item==================");
+                    System.out.println(orderDetail.getItem().getBrandName());
+                    System.out.println(orderDetail.getItem().getPrice());
+
+                    System.out.println("===============Partner ==================");
+                    System.out.println(orderDetail.getItem().getPartner().getCallCenter());
+                    System.out.println(orderDetail.getItem().getPartner().getCeoName());
+
+                    System.out.println("===============Category ==================");
+                    System.out.println(orderDetail.getItem().getPartner().getCategory().getTitle());
+                    System.out.println(orderDetail.getItem().getPartner().getCategory().getType());
                 });
+
             });
         });
     }
@@ -61,20 +85,21 @@ public class UserRepositoryTest extends StudyApplicationTests {
     }
 
     @Test
-    @Transactional
+//    @Transactional
     public void update() {
-        Optional<User> selectedUser = userRepository.findById(1L);
+        Optional<User> selectedUser = userRepository.findByAccount("Tester1");
         selectedUser.ifPresent(user -> {
-            user.setAccount("ChangedTester0123");
-            user.setUpdatedAt(LocalDateTime.now());
-            user.setUpdatedBy("Update() Method");
+//            user.setAccount("ChangedTester0123");
+//            user.setUpdatedAt(LocalDateTime.now());
+//            user.setUpdatedBy("Update() Method");
+
+            /* Accessors Chain Pattern */
+            user.setAccount("Changed3")
+                    .setUpdatedAt(LocalDateTime.now())
+                    .setUpdatedBy("TestServer");
 
             userRepository.save(user);
         });
-
-        /*Hibernate: select user0_.id as id1_0_0_, user0_.account as account2_0_0_, user0_.created_at as created_3_0_0_, user0_.created_by as created_4_0_0_, user0_.email as email5_0_0_, user0_.phone_number as phone_nu6_0_0_, user0_.updated_at as updated_7_0_0_, user0_.updated_by as updated_8_0_0_ from user user0_ where user0_.id=?
-        Hibernate: select user0_.id as id1_0_0_, user0_.account as account2_0_0_, user0_.created_at as created_3_0_0_, user0_.created_by as created_4_0_0_, user0_.email as email5_0_0_, user0_.phone_number as phone_nu6_0_0_, user0_.updated_at as updated_7_0_0_, user0_.updated_by as updated_8_0_0_ from user user0_ where user0_.id=?
-        Hibernate: update user set account=?, created_at=?, created_by=?, email=?, phone_number=?, updated_at=?, updated_by=? where id=?*/
     }
 
     @Test
