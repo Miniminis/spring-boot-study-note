@@ -1,9 +1,8 @@
 package com.example.study.model.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import com.fasterxml.jackson.databind.ser.Serializers;
+import lombok.*;
+import lombok.experimental.Accessors;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -11,15 +10,14 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
+@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @ToString(exclude = {"user", "orderDetails"})
-public class OrderGroup {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+@Builder
+@Accessors(chain = true)
+public class OrderGroup extends BaseEntity {
 
     private String status;
 
@@ -38,14 +36,6 @@ public class OrderGroup {
     private LocalDateTime orderAt;
 
     private LocalDateTime arrivalDate;
-
-    private LocalDateTime createdAt;
-
-    private String createdBy;
-
-    private LocalDateTime updatedAt;
-
-    private String updatedBy;
 
     // orderGroup N : 1 user
     @ManyToOne

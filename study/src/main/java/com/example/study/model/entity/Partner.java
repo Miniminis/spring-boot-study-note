@@ -1,24 +1,21 @@
 package com.example.study.model.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
+import lombok.experimental.Accessors;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
+@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity         //user
 @ToString(exclude = {"items", "category"})
-public class Partner {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+@Builder
+@Accessors(chain = true)
+public class Partner extends BaseEntity{
 
     private String name;
 
@@ -37,14 +34,6 @@ public class Partner {
     private LocalDateTime registeredAt;
 
     private LocalDateTime unregisteredAt;
-
-    private LocalDateTime createdAt;
-
-    private String createdBy;
-
-    private LocalDateTime updatedAt;
-
-    private String updatedBy;
 
     //partner N : 1 category
     @ManyToOne

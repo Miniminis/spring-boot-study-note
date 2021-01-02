@@ -8,17 +8,14 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
+@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity         //user
 @ToString(exclude = {"orderGroups"})
 @Builder
 @Accessors(chain = true)
-public class User {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class User extends BaseEntity{
 
     private String account;
 
@@ -33,14 +30,6 @@ public class User {
     private LocalDateTime registeredAt;
 
     private LocalDateTime unregisteredAt;
-
-    private LocalDateTime createdAt;
-
-    private String createdBy;
-
-    private LocalDateTime updatedAt;
-
-    private String updatedBy;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private List<OrderGroup> orderGroups;

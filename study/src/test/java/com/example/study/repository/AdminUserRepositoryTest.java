@@ -16,9 +16,9 @@ public class AdminUserRepositoryTest extends StudyApplicationTests {
     @Test
     public void create() {
         AdminUser adminUser = new AdminUser();
-        adminUser.setAccount("TestAdmin2");
-        adminUser.setPassword("56789");
-        adminUser.setStatus("R");
+        adminUser.setAccount("TestAdmin3");
+        adminUser.setPassword("3333");
+        adminUser.setStatus("W");
         adminUser.setRole("Admin");
         adminUser.setRegisteredAt(LocalDateTime.now());
 //        adminUser.setCreatedAt(LocalDateTime.now());

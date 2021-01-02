@@ -16,15 +16,12 @@ public class PartnerRepositoryTest extends StudyApplicationTests {
     @Test
     public void create() {
         Partner partner = new Partner();
-        partner.setName("Partner1");
-        partner.setStatus("R");
-        partner.setPartnerNumber("010-1234-5678");
-        partner.setBusinessNumber("01456");
-        partner.setCeoName("사장님1");
+        partner.setName("Partner2");
+        partner.setStatus("W");
+        partner.setPartnerNumber("010-2222-2222");
+        partner.setBusinessNumber("22222");
+        partner.setCeoName("CEO2");
         partner.setRegisteredAt(LocalDateTime.now());
-        partner.setCreatedAt(LocalDateTime.now());
-        partner.setCreatedBy("TestServer");
-//        partner.setCategoryId(1L);
 
         Partner newPartner = partnerRepository.save(partner);
         Assertions.assertNotNull(newPartner);

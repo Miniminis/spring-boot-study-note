@@ -15,11 +15,10 @@ public class CategoryRepositoryTest extends StudyApplicationTests {
 
     @Test
     public void create() {
-        Category category = new Category();
-        category.setType("FASHION");
-        category.setTitle("STREET");
-        category.setCreatedAt(LocalDateTime.now());
-        category.setCreatedBy("TestServer");
+        Category category = Category.builder()
+                .type("FOOD")
+                .title("KOREAN")
+                .build();
 
         Category newCategory = categoryRepository.save(category);
         Assertions.assertNotNull(newCategory);

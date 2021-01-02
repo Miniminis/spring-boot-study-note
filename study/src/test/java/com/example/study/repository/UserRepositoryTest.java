@@ -28,13 +28,13 @@ public class UserRepositoryTest extends StudyApplicationTests {
 
         /* Builder Pattern */
         User user = User.builder()
-                .account("Tester3")
-                .password("9999")
+                .account("Tester4")
+                .password("4444")
                 .status("R")
-                .email("Tester3@gmail.com")
+                .email("Tester4@gmail.com")
                 .registeredAt(LocalDateTime.now())
-                .createdAt(LocalDateTime.now())
-                .createdBy("TestServer")
+//                .createdAt(LocalDateTime.now())
+//                .createdBy("TestServer")
                 .build();
 
         User newUser = userRepository.save(user);
@@ -94,9 +94,9 @@ public class UserRepositoryTest extends StudyApplicationTests {
 //            user.setUpdatedBy("Update() Method");
 
             /* Accessors Chain Pattern */
-            user.setAccount("Changed3")
-                    .setUpdatedAt(LocalDateTime.now())
-                    .setUpdatedBy("TestServer");
+            user.setAccount("Changed3");
+//                    .setUpdatedAt(LocalDateTime.now())
+//                    .setUpdatedBy("TestServer");
 
             userRepository.save(user);
         });
