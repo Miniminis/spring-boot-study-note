@@ -46,4 +46,6 @@ public class Item {
     private String updatedBy;
 
     private Long partnerId;
+    
+    /*TODO. OrderDetial 연결*/
 }
