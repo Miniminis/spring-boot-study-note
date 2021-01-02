@@ -1,7 +1,10 @@
 package com.example.study.controller;
 
 import com.example.study.model.SearchParam;
+import com.example.study.model.network.Header;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/api")     //localhost:8080/api
@@ -22,10 +25,21 @@ public class GetController {
         return id + pwd;
     }
 
-    @GetMapping("/getMultiParameter")       //localhost:8080/api/getMultiParameter?account=guest&email=test@test.com&page=10
+    @GetMapping("/getMultiParameter")
+    //localhost:8080/api/getMultiParameter?account=guest&email=test@test.com&page=10
     public SearchParam getMultiParameter(SearchParam searchParam) {
         return searchParam;
         //{"account":"guest","email":"test@test.com","page":10} 자동으로 json type 으로 return!!!!!
     }
-    
+
+    @GetMapping("/getHeader")
+    public Header getHeader() {
+        return Header.builder()
+                .transactionTime(LocalDateTime.now())
+                .status(200)
+                .message("Connected Successfully")
+                .build();
+    }
+
+
 }
