@@ -2,14 +2,14 @@ package com.example.study.interfaces;
 
 import com.example.study.model.network.Header;
 
-public interface CRUDInterface {
+public interface CRUDInterface<Req, Res> {
 
-    public Header create();
+    public Header<Res> create(Header<Req> req);
 
-    public Header read(Long id);
+    public Header<Res> read(Long id);
 
-    public Header update();
+    public Header<Res> update(Header<Req> req);
 
-    public Header delete(Long id);
+    public Header<Res> delete(Long id);
 
 }
