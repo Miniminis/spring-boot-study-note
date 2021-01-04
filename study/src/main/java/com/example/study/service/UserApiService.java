@@ -9,7 +9,6 @@ import com.example.study.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.jws.soap.SOAPBinding;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -76,8 +75,12 @@ public class UserApiService implements CRUDInterface<UserApiRequest, UserApiResp
     }
 
     @Override
-    public Header<UserApiResponse> delete(Long id) {
-        return null;
+    public Header delete(Long id) {
+        Optional<User> optionalUser = userRepository.findById(id);
+        return optionalUser.map(user -> {
+            userRepository.delete(user);
+            return Header.OK();
+        }).orElseGet(() -> Header.ERROR("Something went wrong!"));
     }
 
     public UserApiResponse response(User user) {
