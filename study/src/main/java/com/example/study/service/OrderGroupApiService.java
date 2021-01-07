@@ -91,7 +91,7 @@ public class OrderGroupApiService implements CRUDInterface<OrderGroupApiRequest,
         OrderGroupApiResponse response = OrderGroupApiResponse.builder()
                 .id(newOrderGroup.getId())
                 .status(newOrderGroup.getStatus())
-                .orderType(newOrderGroup.getOrderType())
+                .orderType(newOrderGroup.getOrderType().getTitle())
                 .revAddress(newOrderGroup.getRevAddress())
                 .revName(newOrderGroup.getRevName())
                 .paymentType(newOrderGroup.getPaymentType())

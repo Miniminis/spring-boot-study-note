@@ -1,5 +1,6 @@
 package com.example.study.model.entity;
 
+import com.example.study.model.enumclass.ItemStatus;
 import lombok.*;
 import lombok.experimental.Accessors;
 
@@ -18,7 +19,8 @@ import java.util.List;
 @Accessors(chain = true)
 public class Item extends BaseEntity{
 
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private ItemStatus status;
 
     private String name;
 

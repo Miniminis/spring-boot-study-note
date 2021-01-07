@@ -1,5 +1,6 @@
 package com.example.study.model.entity;
 
+import com.example.study.model.enumclass.OrderType;
 import com.fasterxml.jackson.databind.ser.Serializers;
 import lombok.*;
 import lombok.experimental.Accessors;
@@ -21,7 +22,8 @@ public class OrderGroup extends BaseEntity {
 
     private String status;
 
-    private String orderType;
+    @Enumerated(EnumType.STRING)
+    private OrderType orderType;
 
     private String revAddress;
 
