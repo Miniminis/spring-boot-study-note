@@ -28,19 +28,22 @@ public class ItemController implements CRUDInterface<ItemApiRequest, ItemApiResp
 
     @Override
     @GetMapping("{id}")
-    public Header<ItemApiResponse> read(Long id) {
-        return null;
+    public Header<ItemApiResponse> read(@PathVariable Long id) {
+        log.info("item read : {}", id);
+        return itemApiService.read(id);
     }
 
     @Override
     @PutMapping("")
     public Header<ItemApiResponse> update(@RequestBody Header<ItemApiRequest> req) {
-        return null;
+        log.info("item update : {}", req);
+        return itemApiService.update(req);
     }
 
     @Override
     @DeleteMapping("{id}")
-    public Header<ItemApiResponse> delete(Long id) {
-        return null;
+    public Header delete(@PathVariable Long id) {
+        log.info("item delete : {}", id);
+        return itemApiService.delete(id);
     }
 }

@@ -34,7 +34,7 @@ public class ItemApiService implements CRUDInterface<ItemApiRequest, ItemApiResp
                 .price(itemApiRequest.getPrice())
                 .brandName(itemApiRequest.getBrandName())
                 .registeredAt(LocalDateTime.now())
-                .partner(partnerRepository.getOne(itemApiRequest.getPartnerId()))
+                .partner(partnerRepository.getOne(itemApiRequest.getPartnerId()))       /*TODO. partnerId 존재하지 않는 경우에 대하여 예외처리 필요! */
                 .build();
 
         Item newItem = itemRepository.save(item);
@@ -43,22 +43,46 @@ public class ItemApiService implements CRUDInterface<ItemApiRequest, ItemApiResp
 
     @Override
     public Header<ItemApiResponse> read(Long id) {
-        return null;
+        Optional<Item> optionalItem = itemRepository.findById(id);
+        return optionalItem.map(item -> response(item))
+                .orElseGet(() -> Header.ERROR("일치하는 아이템이 없습니다!"));
     }
 
     @Override
     public Header<ItemApiResponse> update(Header<ItemApiRequest> req) {
-        return null;
+        ItemApiRequest itemApiRequest = req.getData();
+
+        Optional<Item> foundItem = itemRepository.findById(itemApiRequest.getId());
+        return foundItem
+                .map(item -> {
+                    item.setStatus(itemApiRequest.getStatus())
+                            .setName(itemApiRequest.getName())
+                            .setTitle(itemApiRequest.getTitle())
+                            .setContent(itemApiRequest.getContent())
+                            .setPrice(itemApiRequest.getPrice())
+                            .setBrandName(itemApiRequest.getBrandName());
+                    return item;
+                })
+                .map(newItem -> itemRepository.save(newItem))
+                .map(item -> response(item))
+                .orElseGet(() -> Header.ERROR("아이템이 존재하지 않습니다!"));
     }
 
     @Override
-    public Header<ItemApiResponse> delete(Long id) {
-        return null;
+    public Header delete(Long id) {
+        Optional<Item> optional = itemRepository.findById(id);
+        return optional
+                .map(foundItem -> {
+                    itemRepository.delete(foundItem);
+                    return Header.OK();
+                })
+                .orElseGet(() -> Header.ERROR("아이템이 존재하지 않습니다!"));
     }
 
     private Header<ItemApiResponse> response(Item item) {
         ItemApiResponse itemApiResponse = ItemApiResponse.builder()
                 .id(item.getId())
+                .status(item.getStatus())
                 .name(item.getName())
                 .title(item.getTitle())
                 .content(item.getContent())

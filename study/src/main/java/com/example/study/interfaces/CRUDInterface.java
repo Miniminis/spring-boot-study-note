@@ -10,6 +10,6 @@ public interface CRUDInterface<Req, Res> {
 
     public Header<Res> update(Header<Req> req);
 
-    public Header<Res> delete(Long id);
+    public Header delete(Long id);
 
 }

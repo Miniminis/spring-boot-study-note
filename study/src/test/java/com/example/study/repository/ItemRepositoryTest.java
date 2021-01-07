@@ -36,11 +36,11 @@ public class ItemRepositoryTest extends StudyApplicationTests {
 
     @Test
     public void read() {
-        Optional<Item> item = itemRepository.findById(1L);
+        Optional<Item> item = itemRepository.findById(6L);
 
-//        item.ifPresent(selectedItem -> {
-//            System.out.println(selectedItem);
-//        });
+        item.ifPresent(selectedItem -> {
+            System.out.println("selectedItem ::::  "+selectedItem);
+        });
 
         Assertions.assertTrue(item.isPresent());
 //        Hibernate: select item0_.id as id1_0_0_, item0_.content as content2_0_0_, item0_.name as name3_0_0_, item0_.price as price4_0_0_ from item item0_ where item0_.id=?
