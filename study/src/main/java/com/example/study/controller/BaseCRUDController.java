@@ -2,15 +2,18 @@ package com.example.study.controller;
 
 import com.example.study.interfaces.CRUDInterface;
 import com.example.study.model.network.Header;
+import com.example.study.service.BaseApiService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
 @Component
 @Slf4j
-public class BaseCRUDController<Req, Res> implements CRUDInterface<Req, Res> {
+public abstract class BaseCRUDController<Req, Res, Entity> implements CRUDInterface<Req, Res> {
 
-    protected CRUDInterface<Req, Res> baseService;
+    @Autowired(required = false)
+    protected BaseApiService<Req, Res, Entity> baseService;
 
     @Override
     @PostMapping("")

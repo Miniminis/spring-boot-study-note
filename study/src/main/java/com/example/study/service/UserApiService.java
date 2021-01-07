@@ -1,24 +1,17 @@
 package com.example.study.service;
 
-import com.example.study.interfaces.CRUDInterface;
 import com.example.study.model.entity.User;
 import com.example.study.model.enumclass.UserStatus;
 import com.example.study.model.network.Header;
 import com.example.study.model.network.request.UserApiRequest;
 import com.example.study.model.network.response.UserApiResponse;
-import com.example.study.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
-public class UserApiService implements CRUDInterface<UserApiRequest, UserApiResponse> {
-
-    @Autowired
-    private UserRepository userRepository;
-
+public class UserApiService extends BaseApiService<UserApiRequest, UserApiResponse, User> {
 
     @Override
     public Header<UserApiResponse> create(Header<UserApiRequest> request) {
@@ -35,7 +28,7 @@ public class UserApiService implements CRUDInterface<UserApiRequest, UserApiResp
                 .registeredAt(LocalDateTime.now())
                 .build();
 
-        User newUser = userRepository.save(user);
+        User newUser = baseRepository.save(user);
 
         //3. response user
         return Header.OK(response(newUser));
@@ -43,7 +36,7 @@ public class UserApiService implements CRUDInterface<UserApiRequest, UserApiResp
 
     @Override
     public Header<UserApiResponse> read(Long id) {
-        return userRepository.findById(id)
+        return baseRepository.findById(id)
                 .map(user -> Header.OK(response(user)))
                 .orElseGet(() -> Header.ERROR("No Matched User"));
     }
@@ -57,7 +50,7 @@ public class UserApiService implements CRUDInterface<UserApiRequest, UserApiResp
         UserApiRequest userApiRequest = request.getData();
 
         //2. id -> user read
-        Optional<User> optionalUser = userRepository.findById(userApiRequest.getId());
+        Optional<User> optionalUser = baseRepository.findById(userApiRequest.getId());
 
         return optionalUser
                 .map(user -> {
@@ -70,16 +63,16 @@ public class UserApiService implements CRUDInterface<UserApiRequest, UserApiResp
                             .setUnregisteredAt(userApiRequest.getUnRegisteredAt());
                     return user;
                 })
-                .map(updateUser -> userRepository.save(updateUser))
+                .map(updateUser -> baseRepository.save(updateUser))
                 .map(user -> Header.OK(response(user)))
                 .orElseGet(() -> Header.ERROR("No Matched User!"));
     }
 
     @Override
     public Header delete(Long id) {
-        Optional<User> optionalUser = userRepository.findById(id);
+        Optional<User> optionalUser = baseRepository.findById(id);
         return optionalUser.map(user -> {
-            userRepository.delete(user);
+            baseRepository.delete(user);
             return Header.OK();
         }).orElseGet(() -> Header.ERROR("Something went wrong!"));
     }

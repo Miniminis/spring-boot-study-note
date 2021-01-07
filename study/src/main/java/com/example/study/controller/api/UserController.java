@@ -2,6 +2,7 @@ package com.example.study.controller.api;
 
 import com.example.study.controller.BaseCRUDController;
 import com.example.study.interfaces.CRUDInterface;
+import com.example.study.model.entity.User;
 import com.example.study.model.network.Header;
 import com.example.study.model.network.request.UserApiRequest;
 import com.example.study.model.network.response.UserApiResponse;
@@ -15,20 +16,6 @@ import javax.annotation.PostConstruct;
 @Slf4j
 @RestController
 @RequestMapping("/api/user")
-public class UserController extends BaseCRUDController<UserApiRequest, UserApiResponse> {
+public class UserController extends BaseCRUDController<UserApiRequest, UserApiResponse, User> {
 
-    /*
-     * create //post, ""
-     * read  //get, {id}
-     * update    //put, ""
-     * delete    //delete, {id}
-     * */
-
-    @Autowired
-    private UserApiService userApiService;
-
-    @PostConstruct
-    private void init() {
-        this.baseService = userApiService;
-    }
 }

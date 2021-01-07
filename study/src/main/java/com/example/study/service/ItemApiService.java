@@ -1,11 +1,9 @@
 package com.example.study.service;
 
-import com.example.study.interfaces.CRUDInterface;
 import com.example.study.model.entity.Item;
 import com.example.study.model.network.Header;
 import com.example.study.model.network.request.ItemApiRequest;
 import com.example.study.model.network.response.ItemApiResponse;
-import com.example.study.repository.ItemRepository;
 import com.example.study.repository.PartnerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,10 +12,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
-public class ItemApiService implements CRUDInterface<ItemApiRequest, ItemApiResponse> {
-
-    @Autowired
-    private ItemRepository itemRepository;
+public class ItemApiService extends BaseApiService<ItemApiRequest, ItemApiResponse, Item> {
 
     @Autowired
     private PartnerRepository partnerRepository;
@@ -37,13 +32,13 @@ public class ItemApiService implements CRUDInterface<ItemApiRequest, ItemApiResp
                 .partner(partnerRepository.getOne(itemApiRequest.getPartnerId()))       /*TODO. partnerId 존재하지 않는 경우에 대하여 예외처리 필요! */
                 .build();
 
-        Item newItem = itemRepository.save(item);
+        Item newItem = baseRepository.save(item);
         return response(newItem);
     }
 
     @Override
     public Header<ItemApiResponse> read(Long id) {
-        Optional<Item> optionalItem = itemRepository.findById(id);
+        Optional<Item> optionalItem = baseRepository.findById(id);
         return optionalItem.map(item -> response(item))
                 .orElseGet(() -> Header.ERROR("일치하는 아이템이 없습니다!"));
     }
@@ -52,7 +47,7 @@ public class ItemApiService implements CRUDInterface<ItemApiRequest, ItemApiResp
     public Header<ItemApiResponse> update(Header<ItemApiRequest> req) {
         ItemApiRequest itemApiRequest = req.getData();
 
-        Optional<Item> foundItem = itemRepository.findById(itemApiRequest.getId());
+        Optional<Item> foundItem = baseRepository.findById(itemApiRequest.getId());
         return foundItem
                 .map(item -> {
                     item.setStatus(itemApiRequest.getStatus())
@@ -63,17 +58,17 @@ public class ItemApiService implements CRUDInterface<ItemApiRequest, ItemApiResp
                             .setBrandName(itemApiRequest.getBrandName());
                     return item;
                 })
-                .map(newItem -> itemRepository.save(newItem))
+                .map(newItem -> baseRepository.save(newItem))
                 .map(item -> response(item))
                 .orElseGet(() -> Header.ERROR("아이템이 존재하지 않습니다!"));
     }
 
     @Override
     public Header delete(Long id) {
-        Optional<Item> optional = itemRepository.findById(id);
+        Optional<Item> optional = baseRepository.findById(id);
         return optional
                 .map(foundItem -> {
-                    itemRepository.delete(foundItem);
+                    baseRepository.delete(foundItem);
                     return Header.OK();
                 })
                 .orElseGet(() -> Header.ERROR("아이템이 존재하지 않습니다!"));
