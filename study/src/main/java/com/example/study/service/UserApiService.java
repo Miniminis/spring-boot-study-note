@@ -5,11 +5,18 @@ import com.example.study.model.enumclass.UserStatus;
 import com.example.study.model.network.Header;
 import com.example.study.model.network.request.UserApiRequest;
 import com.example.study.model.network.response.UserApiResponse;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class UserApiService extends BaseApiService<UserApiRequest, UserApiResponse, User> {
 
@@ -89,5 +96,17 @@ public class UserApiService extends BaseApiService<UserApiRequest, UserApiRespon
                 .unRegisteredAt(user.getUnregisteredAt())
                 .build();
         return userApiResponse;
+    }
+
+    public Header<List<UserApiResponse>> search(Pageable pageable) {
+        log.info("{}", pageable);
+
+        Page<User> users = baseRepository.findAll(pageable);
+
+        List<UserApiResponse> userApiResponses = users.stream()
+                .map(this::response)
+                .collect(Collectors.toList());
+
+        return Header.OK(userApiResponses);
     }
 }
