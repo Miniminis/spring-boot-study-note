@@ -21,6 +21,8 @@ public class Header<T> {
 
     private T data;
 
+    private Pagination pagination;
+
     //response 200
     public static <T> Header<T> OK() {
         return (Header<T>) Header.builder()
@@ -37,6 +39,17 @@ public class Header<T> {
                 .status(200)
                 .message("Succeed")
                 .data(data)
+                .build();
+    }
+
+    //response 200 with data & pagination
+    public static <T> Header<T> OK(T data, Pagination pagination) {
+        return (Header<T>) Header.builder()
+                .transactionTime(LocalDateTime.now())
+                .status(200)
+                .message("Succeed")
+                .data(data)
+                .pagination(pagination)
                 .build();
     }
 

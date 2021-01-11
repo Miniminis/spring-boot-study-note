@@ -3,6 +3,7 @@ package com.example.study.service;
 import com.example.study.model.entity.User;
 import com.example.study.model.enumclass.UserStatus;
 import com.example.study.model.network.Header;
+import com.example.study.model.network.Pagination;
 import com.example.study.model.network.request.UserApiRequest;
 import com.example.study.model.network.response.UserApiResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -107,6 +108,13 @@ public class UserApiService extends BaseApiService<UserApiRequest, UserApiRespon
                 .map(this::response)
                 .collect(Collectors.toList());
 
-        return Header.OK(userApiResponses);
+        Pagination pagination = Pagination.builder()
+                .totalPages(users.getTotalPages())
+                .totalElements(users.getTotalElements())
+                .currentPage(users.getNumber())
+                .currentElements(users.getNumberOfElements())
+                .build();
+
+        return Header.OK(userApiResponses, pagination);
     }
 }
