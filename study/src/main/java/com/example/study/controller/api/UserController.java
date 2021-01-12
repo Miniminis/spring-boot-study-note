@@ -6,6 +6,7 @@ import com.example.study.model.entity.User;
 import com.example.study.model.network.Header;
 import com.example.study.model.network.request.UserApiRequest;
 import com.example.study.model.network.response.UserApiResponse;
+import com.example.study.model.network.response.UserOrderApiResponse;
 import com.example.study.service.UserApiService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -23,7 +24,13 @@ public class UserController extends BaseCRUDController<UserApiRequest, UserApiRe
     @GetMapping("")
     public Header<List<UserApiResponse>> search(@PageableDefault(size = 15, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
         log.info("{}", pageable);
-        return ((UserApiService)baseService).search(pageable);
+        return ((UserApiService) baseService).search(pageable);
+    }
+
+    @GetMapping("/{id}/orderInfo")
+    public Header<UserOrderApiResponse> orderInfo(@PathVariable Long id) {
+        log.info("{}", id);
+        return ((UserApiService) baseService).orderInfo(id);
     }
 
 }

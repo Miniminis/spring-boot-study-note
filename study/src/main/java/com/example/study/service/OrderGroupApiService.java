@@ -82,7 +82,7 @@ public class OrderGroupApiService extends BaseApiService<OrderGroupApiRequest, O
                 .orElseGet(() -> Header.ERROR("일치하는 데이터가 없습니다!"));
     }
 
-    private Header<OrderGroupApiResponse> response(OrderGroup newOrderGroup) {
+    public Header<OrderGroupApiResponse> response(OrderGroup newOrderGroup) {
         OrderGroupApiResponse response = OrderGroupApiResponse.builder()
                 .id(newOrderGroup.getId())
                 .status(newOrderGroup.getStatus())

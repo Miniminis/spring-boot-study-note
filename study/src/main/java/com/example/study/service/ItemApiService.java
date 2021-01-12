@@ -74,7 +74,7 @@ public class ItemApiService extends BaseApiService<ItemApiRequest, ItemApiRespon
                 .orElseGet(() -> Header.ERROR("아이템이 존재하지 않습니다!"));
     }
 
-    private Header<ItemApiResponse> response(Item item) {
+    public Header<ItemApiResponse> response(Item item) {
         ItemApiResponse itemApiResponse = ItemApiResponse.builder()
                 .id(item.getId())
                 .status(item.getStatus())
