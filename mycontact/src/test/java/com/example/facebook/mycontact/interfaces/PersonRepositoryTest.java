@@ -66,7 +66,8 @@ class PersonRepositoryTest{
     }
 
     public Person generatePerson(String name, int age) {
-        return personRepository.save(new Person(name, age));
+        Person person = new Person(name, age);
+        return personRepository.save(person);
     }
 
     public Block generateBlock(String name) {

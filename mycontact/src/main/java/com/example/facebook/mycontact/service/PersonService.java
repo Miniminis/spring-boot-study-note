@@ -21,10 +21,7 @@ public class PersonService {
 
     public List<Person> getPeopleExcludeBlockList() {
         List<Person> personList = personRepository.findAll();
-        List<Block> blockList = blockRepository.findAll();
-
-        List<String> blockNames = blockList.stream().map(Block::getName).collect(Collectors.toList());
-        return personList.stream().filter(person -> !blockNames.contains(person.getName())).collect(Collectors.toList());
+        return personList.stream().filter(person -> person.getBlock() == null).collect(Collectors.toList());
         //이렇게 설정할 경우에, 동명이인의 martin 에 대해서 2명이 동시에 block 되는 현상이 발생됨.
         //--> person 과 관계설정이 필요한 대목!
     }

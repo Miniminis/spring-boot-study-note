@@ -3,10 +3,7 @@ package com.example.facebook.mycontact.domain;
 import com.sun.istack.NotNull;
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -38,23 +35,7 @@ public class Person {
 
     private String phoneNumber;
 
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (o == null || getClass() != o.getClass()) return false;
-//        Person person = (Person) o;
-//        return Objects.equals(id, person.id) &&
-//                Objects.equals(name, person.name) &&
-//                Objects.equals(age, person.age) &&
-//                Objects.equals(bloodType, person.bloodType) &&
-//                Objects.equals(address, person.address) &&
-//                Objects.equals(birthDay, person.birthDay) &&
-//                Objects.equals(job, person.job) &&
-//                Objects.equals(phoneNumber, person.phoneNumber);
-//    }
-//
-//    @Override
-//    public int hashCode() {
-//        return Objects.hash(id, name, age, bloodType, address, birthDay, job, phoneNumber);
-//    }
+    @OneToOne
+    private Block block;
+
 }
