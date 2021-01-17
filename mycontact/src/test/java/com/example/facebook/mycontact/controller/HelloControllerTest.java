@@ -32,8 +32,8 @@ class HelloControllerTest {
     void mockMvcTest() throws Exception {
         mockMvc = MockMvcBuilders.standaloneSetup(helloController).build();
 
-        mockMvc.perform(
-                MockMvcRequestBuilders.get("/api/helloworld")
-        ).andDo(MockMvcResultHandlers.print());
+        mockMvc
+                .perform(MockMvcRequestBuilders.get("/api/helloworld"))
+                .andDo(MockMvcResultHandlers.print());
     }
 }
