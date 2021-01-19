@@ -23,10 +23,8 @@ public class Block {
 
     private String reason;
 
-    @NonNull
     private LocalDate startDate;
 
-    @NonNull
     private LocalDate endDate;
 
 }
