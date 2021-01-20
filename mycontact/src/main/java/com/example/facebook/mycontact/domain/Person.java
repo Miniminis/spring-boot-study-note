@@ -35,7 +35,12 @@ public class Person {
 
     private String phoneNumber;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Block block;
+
+    /*
+    * CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE
+    * == CascadeType.ALL
+    * */
 
 }

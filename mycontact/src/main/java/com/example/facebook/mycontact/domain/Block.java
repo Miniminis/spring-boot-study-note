@@ -1,6 +1,7 @@
 package com.example.facebook.mycontact.domain;
 
 import lombok.*;
+import lombok.experimental.Accessors;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,6 +13,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @RequiredArgsConstructor
 @Data
+@Accessors(chain = true)
 public class Block {
 
     @Id
