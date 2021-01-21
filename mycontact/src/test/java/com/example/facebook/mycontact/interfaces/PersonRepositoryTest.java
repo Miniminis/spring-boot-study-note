@@ -1,9 +1,7 @@
 package com.example.facebook.mycontact.interfaces;
 
-import com.example.facebook.mycontact.domain.Block;
 import com.example.facebook.mycontact.domain.Person;
 import com.example.facebook.mycontact.domain.dto.Birthday;
-import org.apache.tomcat.jni.Local;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,109 +19,108 @@ class PersonRepositoryTest {
     @Autowired
     private PersonRepository personRepository;
 
+    @Autowired
+    private BlockRepository blockRepository;
 
-    void givenPerson(String name, int age, String bloodType) {
-        givenPerson(name, age, bloodType, null);
-    }
-
-
-    void givenPerson(String name, int age, String bloodType, Block block) {
-        givenPerson(name, age, bloodType, block, null);
-    }
-
-    void givenPerson(String name, int age, String bloodType, Block block, LocalDate birthDay) {
-        Person person = new Person(name, age);
-        person.setBloodType(bloodType);
-        person.setBlock(block);
-        person.setBirthDay(new Birthday(birthDay));
-
-        personRepository.save(person);
-    }
 
     @Test
-    @Transactional
     void findByMonthOfBirthDay() {
-        givenPerson("martin", 10, "A", new Block("james"),
-                LocalDate.of(1994, 8, 11));
-        givenPerson("james", 12, "B", null,
-                LocalDate.of(1990, 12, 19));
-        givenPerson("selly", 38, "AB", new Block("james"),
-                LocalDate.of(1988, 8, 22));
-        givenPerson("martin", 120, "A", null,
-                LocalDate.of(1993, 5, 24));
+        List<Person> result = personRepository.findByBirthDayMonthOfBirthday(8);
 
-        List<Person> personList = personRepository.findByBirthDayMonthOfBirthday(8);
-        personList.forEach(System.out::println);
+        assertEquals(result.size(), 2);
+        assertEquals(result.get(0).getName(), "martin");
+        assertEquals(result.get(1).getName(), "james");
     }
 
 
     @Test
-    @Transactional
     void findByBirthDateBetweenTest() {
-        givenPerson("martin", 10, "A", new Block("james"),
-                LocalDate.of(1994, 8, 11));
-        givenPerson("james", 12, "B", null,
-                LocalDate.of(1990, 12, 19));
-        givenPerson("selly", 38, "AB", new Block("james"),
-                LocalDate.of(1988, 8, 22));
-        givenPerson("martin", 120, "A", null,
-                LocalDate.of(1993, 5, 24));
+        List<Person> result = personRepository.findByBirthDayBetween(
+                new Birthday(LocalDate.of(1988, 8, 1)),
+                new Birthday(LocalDate.of(1994, 8, 31)));
 
-        List<Person> personList = personRepository.findByBirthDayBetween(LocalDate.of(1988, 8, 1),
-                LocalDate.of(1994, 8, 31));
 
-        personList.forEach(System.out::println);
+        assertEquals(result.size(), 2);
+        assertEquals(result.get(0).getName(), "martin");
+        assertEquals(result.get(1).getName(), "katy");
     }
 
 
     @Test
     void findByBlockIsNullTest() {
-        givenPerson("martin", 10, "A", new Block("james"));
-        givenPerson("james", 12, "B");
-        givenPerson("selly", 38, "AB", new Block("james"));
-        givenPerson("martin", 120, "A");
-
-        List<Person> personList = personRepository.findByBlockIsNull();
-        personList.forEach(System.out::println);
+        List<Person> result  = personRepository.findByBlockIsNull();
+        assertEquals(result.size(), 3);
+        assertEquals(result.get(0).getName(), "james");
+        assertEquals(result.get(1).getName(), "katy");
+        assertEquals(result.get(2).getName(), "martin");
     }
 
 
     @Test
     void findByNameTest() {
-        givenPerson("martin", 10, "A");
-        givenPerson("james", 12, "B");
-        givenPerson("selly", 38, "AB");
-        givenPerson("martin", 120, "A");
-
-        List<Person> personList = personRepository.findByName("martin");
-        personList.forEach(System.out::println);
+        List<Person> result = personRepository.findByName("martin");
+        assertEquals(result.size(), 2);
     }
 
 
     @Test
-    @Transactional
     public void crud() {
-//        Person person = new Person();
-        Person person = new Person("james", 10);
-//        person.setName("james");
-//        person.setAge(10);
+        Person person = new Person();
+        person.setName("tom");
+        person.setAge(120);
+
         personRepository.save(person);
 
-        System.out.println(personRepository.findAll());
-
-//        List<Person> personList =  personRepository.findAll();
-//        assertEquals(personList.size(), 1);
-//        assertEquals(personList.get(0).getName(), "james");
+        List<Person> result =  personRepository.findByName("tom");
+        assertEquals(result.size(), 1);
+        assertEquals(result.get(0).getName(), "tom");
     }
 
     @Test
-    @Transactional
     public void equalsAndHashCodeTest() {
         Person person1 = new Person("james", 10);
         Person person2 = new Person("james", 10);
 
         assertEquals(person1, person2);
-        System.out.println(person1.hashCode());
-        System.out.println(person2.hashCode());
+        assertEquals(person1.hashCode(), person2.hashCode());
+    }
+
+    @Test
+    @Transactional
+    public Person read(Long id) {
+        return personRepository.findById(id)
+                .orElse(null);
+    }
+
+
+    @Test
+    @Transactional
+    public void casecadeMergeTest() {
+        Person result = read(1L);
+        result.getBlock().setStartDate(LocalDate.now()).setReason("Too much talker");
+        personRepository.save(result);
+
+        Person person = read(1L);
+        assertEquals(person.getName(), "martin");
+        assertEquals(person.getBlock().getReason(), "Too much talker");
+    }
+
+
+    @Test
+    @Transactional
+    public void casecadeRemoveTest() {      //CascadeType.REMOVE
+        Person person = read(1L);
+        personRepository.delete(person);
+        assertNull(read(1L));
+    }
+
+
+    @Test
+    @Transactional
+    public void casecadeOrphanRemovalTest() {       //orphanRemoval = true
+        Person person = read(1L);
+        person.setBlock(null);
+        personRepository.save(person);
+        assertNull(read(1L).getBlock());
     }
 }
