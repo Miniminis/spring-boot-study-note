@@ -1,5 +1,6 @@
 package com.example.facebook.mycontact.domain;
 
+import com.example.facebook.mycontact.domain.dto.Birthday;
 import com.sun.istack.NotNull;
 import lombok.*;
 
@@ -29,7 +30,8 @@ public class Person {
 
     private String address;
 
-    private LocalDate birthDay;
+    @Embedded
+    private Birthday birthDay;
 
     private String job;
 

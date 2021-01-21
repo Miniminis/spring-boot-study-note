@@ -2,6 +2,7 @@ package com.example.facebook.mycontact.interfaces;
 
 import com.example.facebook.mycontact.domain.Block;
 import com.example.facebook.mycontact.domain.Person;
+import com.example.facebook.mycontact.domain.dto.Birthday;
 import org.apache.tomcat.jni.Local;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,9 +35,25 @@ class PersonRepositoryTest {
         Person person = new Person(name, age);
         person.setBloodType(bloodType);
         person.setBlock(block);
-        person.setBirthDay(birthDay);
+        person.setBirthDay(new Birthday(birthDay));
 
         personRepository.save(person);
+    }
+
+    @Test
+    @Transactional
+    void findByMonthOfBirthDay() {
+        givenPerson("martin", 10, "A", new Block("james"),
+                LocalDate.of(1994, 8, 11));
+        givenPerson("james", 12, "B", null,
+                LocalDate.of(1990, 12, 19));
+        givenPerson("selly", 38, "AB", new Block("james"),
+                LocalDate.of(1988, 8, 22));
+        givenPerson("martin", 120, "A", null,
+                LocalDate.of(1993, 5, 24));
+
+        List<Person> personList = personRepository.findByBirthDayMonthOfBirthday(8);
+        personList.forEach(System.out::println);
     }
 
 
