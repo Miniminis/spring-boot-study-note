@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,11 +27,9 @@ public class PersonService {
         return personRepository.findByBlockIsNull();
     }
 
-    @Transactional(readOnly = true)
+//    @Transactional(readOnly = true)
     public Person getPerson(Long id) {
-        Person person = personRepository.findById(id).get();
-        log.info("{}", person);
-
-        return person;
+        log.info("{}", id);
+        return personRepository.findById(id).orElseGet(null);
     }
 }
