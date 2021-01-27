@@ -11,14 +11,14 @@ class RestaurantTests {
 
     @Test
     public void create() {
-        Restaurant restaurant = new Restaurant("Bob Zip", "Busan");
+        Restaurant restaurant = new Restaurant(1004L, "Bob Zip", "Busan");
         Assertions.assertEquals("Bob Zip", restaurant.getName());
         Assertions.assertEquals("Busan", restaurant.getAddress());
     }
 
     @Test
     public void info() {
-        Restaurant restaurant = new Restaurant("Bob Zip", "Seoul");
+        Restaurant restaurant = new Restaurant(1004L, "Bob Zip", "Seoul");
         assertEquals("Bob Zip in Seoul", restaurant.getInformation());
     }
 
