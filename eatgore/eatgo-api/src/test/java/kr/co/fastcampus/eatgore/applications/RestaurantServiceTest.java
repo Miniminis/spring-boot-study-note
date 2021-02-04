@@ -3,15 +3,15 @@ package kr.co.fastcampus.eatgore.applications;
 import kr.co.fastcampus.eatgore.domains.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-//@SpringBootTest
 class RestaurantServiceTest {
 
-//    @Autowired
+    @Mock
     private RestaurantService restaurantService;
 
     @BeforeEach

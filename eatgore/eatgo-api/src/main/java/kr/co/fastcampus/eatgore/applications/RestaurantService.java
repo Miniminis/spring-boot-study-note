@@ -12,10 +12,10 @@ import java.util.List;
 @Service
 public class RestaurantService {
 
-//    @Autowired
+    @Autowired
     private RestaurantRepository restaurantRepository;
 
-//    @Autowired
+    @Autowired
     private MenuItemRepository menuItemRepository;
 
     public RestaurantService(RestaurantRepository restaurantRepository, MenuItemRepository menuItemRepository) {
