@@ -1,9 +1,14 @@
 package kr.co.fastcampus.eatgore.domains;
 
-import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.CrudRepository;
 
-public interface RestaurantRepository {
+import java.util.List;
+import java.util.Optional;
+
+public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
+
     List<Restaurant> findAll();
 
-    Restaurant findById(Long id);
+    Optional<Restaurant> findById(Long id);
 }

@@ -16,6 +16,7 @@ import java.util.List;
 
 import static org.hamcrest.core.StringContains.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -34,9 +35,20 @@ class RestaurantControllerTests {
     @BeforeEach
     public void init() {
         restaurants = new ArrayList<>();
-        Restaurant bobZip = new Restaurant(1004L, "Bob Zip", "Busan");
-        ramen = new Restaurant(2020L, "Korean Ramen", "Incheon");
-        ramen.addMenuItem(new MenuItem("Kimchi"));
+        Restaurant bobZip = Restaurant.builder()
+                .id(1L)
+                .name("Bob Zip")
+                .address("Busan")
+                .build();
+
+        ramen = Restaurant.builder()
+                .id(2L)
+                .name("Korean Ramen")
+                .address("Incheon")
+                .build();
+
+        ramen.addMenuItem(MenuItem.builder().id(1L).restaurantId(2L).name("Kimchi").build());
+
         restaurants.add(bobZip);
         restaurants.add(ramen);
     }
@@ -47,18 +59,33 @@ class RestaurantControllerTests {
 
         mvc.perform(get("/restaurants"))
                 .andExpect(status().isOk())
-                .andExpect(content().string(containsString("\"id\":1004")))
+                .andExpect(content().string(containsString("\"id\":1")))
                 .andExpect(content().string(containsString("\"name\":\"Bob Zip\"")));
     }
 
     @Test
     public void detail() throws Exception {
-        Mockito.when(restaurantService.getRestaurant(2020L)).thenReturn(ramen);
+        Mockito.when(restaurantService.getRestaurant(2L)).thenReturn(ramen);
 
-        mvc.perform(get("/restaurant/2020"))
+        mvc.perform(get("/restaurant/2"))
                 .andExpect(status().isOk())
-                .andExpect(content().string(containsString("\"id\":2020")))
+                .andExpect(content().string(containsString("\"id\":2")))
                 .andExpect(content().string(containsString("\"name\":\"Korean Ramen\"")))
                 .andExpect(content().string(containsString("Kimchi")));
+    }
+
+    @Test
+    public void create() throws Exception {
+        Mockito.when(restaurantService.createUser(ramen)).thenReturn(ramen);
+
+        mvc.perform(post("/restaurant/")
+                .content("{\n" +
+                    "            \"name\" : \"Alien Food\",\n" +
+                    "            \"address\" : \"Universe\"\n" +
+                    "        }")
+                .contentType("application/json"))
+                .andExpect(status().isOk())
+//                .andExpect(content().string(containsString("\"id\":3")))
+                .andExpect(content().string(containsString("\"name\" : \"Alien Food\"")));
     }
 }

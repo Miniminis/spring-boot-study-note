@@ -1,13 +1,24 @@
 package kr.co.fastcampus.eatgore.domains;
 
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
+@Entity
+@NoArgsConstructor
+@Builder
+@Getter
 public class MenuItem {
-    private final String name;
 
-    public MenuItem(String name) {
-        this.name = name;
-    }
+    @Id
+    @GeneratedValue
+    private Long id;
 
-    public String getName() {
-        return this.name;
-    }
+    private Long restaurantId;
+
+    private String name;
 }

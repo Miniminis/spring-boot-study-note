@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class RestaurantService {
@@ -18,21 +19,23 @@ public class RestaurantService {
     @Autowired
     private MenuItemRepository menuItemRepository;
 
-    public RestaurantService(RestaurantRepository restaurantRepository, MenuItemRepository menuItemRepository) {
-        this.restaurantRepository = restaurantRepository;
-        this.menuItemRepository = menuItemRepository;
-    }
-
     public List<Restaurant> getRestaurants() {
         return restaurantRepository.findAll();
     }
 
     public Restaurant getRestaurant(Long id) {
-        Restaurant restaurant = restaurantRepository.findById(id);
+        Restaurant restaurant = restaurantRepository.findById(id).orElse(null);
         List<MenuItem> menuItems = menuItemRepository.findByRestaurantId(id);
-
         restaurant.setMenuItems(menuItems);
 
         return restaurant;
+    }
+
+    public Restaurant createUser(Restaurant restaurant) {
+        if(restaurant == null) {
+            return Restaurant.builder().build();
+        }
+
+        return restaurantRepository.save(restaurant);
     }
 }

@@ -5,6 +5,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 class EatgoreApplicationTests {
+    
+    /* spring boot
+    https://www.baeldung.com
+    * */
 
     @Test
     void contextLoads() {
