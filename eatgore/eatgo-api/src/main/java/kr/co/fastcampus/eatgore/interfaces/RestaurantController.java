@@ -26,7 +26,7 @@ public class RestaurantController {
 
     @PostMapping("/restaurant")
     public Restaurant createUser(@RequestBody Restaurant restaurant) {
-        return restaurantService.createUser(restaurant);
+        return restaurantService.createRestaurant(restaurant);
     }
 
 }

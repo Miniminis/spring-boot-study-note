@@ -34,7 +34,7 @@ public class RestaurantService {
         return restaurant;
     }
 
-    public Restaurant createUser(Restaurant restaurant) {
+    public Restaurant createRestaurant(Restaurant restaurant) {
         if(restaurant == null) {
             return new Restaurant();
         }
