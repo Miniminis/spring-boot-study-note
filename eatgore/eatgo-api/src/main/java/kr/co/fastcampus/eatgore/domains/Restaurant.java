@@ -14,6 +14,7 @@ import java.util.List;
 
 @Entity
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Builder
 public class Restaurant {
