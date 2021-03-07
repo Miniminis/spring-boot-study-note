@@ -1,9 +1,6 @@
 package kr.co.fastcampus.eatgore.applications;
 
-import kr.co.fastcampus.eatgore.domains.MenuItem;
-import kr.co.fastcampus.eatgore.domains.MenuItemRepository;
-import kr.co.fastcampus.eatgore.domains.Restaurant;
-import kr.co.fastcampus.eatgore.domains.RestaurantRepository;
+import kr.co.fastcampus.eatgore.domains.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -15,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -63,7 +61,7 @@ class RestaurantServiceTest {
 
 
     @Test
-    public void getRestaurant() {
+    public void getRestaurantWithExisted() {
         Restaurant restaurant = restaurantService.getRestaurant(1004L);
 
         given(menuItemRepository.findByRestaurantId(1004L)).will(invocation -> {
@@ -73,6 +71,13 @@ class RestaurantServiceTest {
         });
 
         assertThat(restaurant.getId()).isEqualTo(1004L);
+    }
+
+    @Test
+    public void getRestaurantWithNotExisted() {
+        assertThatThrownBy(() -> {
+            restaurantService.getRestaurant(365L);
+        }).isInstanceOf(RestaurantNotFoundException.class);
     }
 
     @Test

@@ -58,7 +58,7 @@ class RestaurantControllerTests {
     }
 
     @Test
-    public void detail() throws Exception {
+    public void detailWithExisted() throws Exception {
         MenuItem menuitem = MenuItem.builder()
                 .id(1L)
                 .restaurantId(1004L)
@@ -85,6 +85,15 @@ class RestaurantControllerTests {
                 .andExpect(content().string(
                         containsString("\"menuItems\":[{\"id\":1,\"restaurantId\":1004,\"name\":\"Bibim Bob\"}]")
                 ));
+    }
+
+    @Test
+    public void detailWithNotExisted() throws Exception {
+        given(restaurantService.getRestaurant(365L)).willThrow(new RestaurantNotFoundException(365L));
+
+        mvc.perform(get("/restaurant/365"))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(containsString("Restaurant Not Found")));
     }
 
     @Test
@@ -142,7 +151,7 @@ class RestaurantControllerTests {
     public void updateWithNullOrEmptyData() throws Exception {
         mvc.perform(patch("/restaurant/1004")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"name\":, \"address\":\"\"}"))
+                .content("{\"name\":null, \"address\":\"\"}"))
                 .andExpect(status().isBadRequest());
     }
 }
