@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.core.StringContains.containsString;
@@ -58,10 +59,17 @@ class RestaurantControllerTests {
 
     @Test
     public void detail() throws Exception {
+        MenuItem menuitem = MenuItem.builder()
+                .id(1L)
+                .restaurantId(1004L)
+                .name("Bibim Bob")
+                .build();
+
         Restaurant restaurant = Restaurant.builder()
                 .id(1004L)
                 .name("JOKER House")
                 .address("Seoul")
+                .menuItems(Arrays.asList(menuitem))
                 .build();
 
         given(restaurantService.getRestaurant(1004L)).willReturn(restaurant);
@@ -73,6 +81,9 @@ class RestaurantControllerTests {
                 ))
                 .andExpect(content().string(
                         containsString("\"name\":\"JOKER House\"")
+                ))
+                .andExpect(content().string(
+                        containsString("\"menuItems\":[{\"id\":1,\"restaurantId\":1004,\"name\":\"Bibim Bob\"}]")
                 ));
     }
 

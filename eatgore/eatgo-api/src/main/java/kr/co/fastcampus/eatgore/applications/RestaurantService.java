@@ -27,17 +27,15 @@ public class RestaurantService {
     public Restaurant getRestaurant(Long id) {
         Restaurant restaurant = restaurantRepository.findById(id).orElse(null);
 
-        if (restaurant != null) {
-            List<MenuItem> menuItems = menuItemRepository.findByRestaurantId(id);
-            restaurant.setMenuItems(menuItems);
-        }
+        List<MenuItem> menuItems = menuItemRepository.findByRestaurantId(id);
+        restaurant.setMenuItems(menuItems);
 
         return restaurant;
     }
 
     public Restaurant createRestaurant(Restaurant restaurant) {
         if(restaurant == null) {
-            return new Restaurant();
+            return Restaurant.builder().build();
         }
 
         return restaurantRepository.save(restaurant);
