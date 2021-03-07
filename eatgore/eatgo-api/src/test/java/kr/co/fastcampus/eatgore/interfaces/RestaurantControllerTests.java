@@ -88,7 +88,7 @@ class RestaurantControllerTests {
     }
 
     @Test
-    public void create() throws Exception {
+    public void createWithValidData() throws Exception {
         given(restaurantService.createRestaurant(any())).will(invocation -> {
             Restaurant restaurant = invocation.getArgument(0);
             return Restaurant.builder()
@@ -111,7 +111,25 @@ class RestaurantControllerTests {
     }
 
     @Test
-    public void update() throws Exception {
+    public void createWithEmptyData() throws Exception {
+        mvc.perform(post("/restaurant")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"name\":\"test name\"," +
+                        "\"address\":\"\"}"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void createWithNullData() throws Exception {
+        mvc.perform(post("/restaurant")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"name\":," +
+                        "\"address\":}"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void updateWithValidData() throws Exception {
         mvc.perform(patch("/restaurant/1004")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"name\":\"Ghost House\", \"address\":\"Thailand\"}"))
@@ -120,4 +138,11 @@ class RestaurantControllerTests {
         verify(restaurantService).updateRestaurant(anyLong(), any());
     }
 
+    @Test
+    public void updateWithNullOrEmptyData() throws Exception {
+        mvc.perform(patch("/restaurant/1004")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"name\":, \"address\":\"\"}"))
+                .andExpect(status().isBadRequest());
+    }
 }

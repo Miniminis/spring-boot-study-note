@@ -5,6 +5,7 @@ import kr.co.fastcampus.eatgore.domains.Restaurant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @CrossOrigin
@@ -25,7 +26,7 @@ public class RestaurantController {
     }
 
     @PostMapping("/restaurant")
-    public Restaurant createRestaurant(@RequestBody Restaurant restaurant) {
+    public Restaurant createRestaurant(@Valid @RequestBody Restaurant restaurant) {
         return restaurantService.createRestaurant(restaurant);
     }
 
