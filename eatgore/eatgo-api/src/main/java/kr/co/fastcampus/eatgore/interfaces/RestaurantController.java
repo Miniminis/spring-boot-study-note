@@ -25,8 +25,13 @@ public class RestaurantController {
     }
 
     @PostMapping("/restaurant")
-    public Restaurant createUser(@RequestBody Restaurant restaurant) {
+    public Restaurant createRestaurant(@RequestBody Restaurant restaurant) {
         return restaurantService.createRestaurant(restaurant);
+    }
+
+    @PatchMapping("/restaurant/{id}")
+    public Restaurant updateRestaurant(@PathVariable Long id, @RequestBody Restaurant restaurant) {
+        return restaurantService.updateRestaurant(id, restaurant);
     }
 
 }

@@ -2,9 +2,7 @@ package kr.co.fastcampus.eatgore.interfaces;
 
 import kr.co.fastcampus.eatgore.applications.RestaurantService;
 import kr.co.fastcampus.eatgore.domains.*;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -16,10 +14,10 @@ import java.util.List;
 
 import static org.hamcrest.core.StringContains.containsString;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(RestaurantController.class)
@@ -31,71 +29,84 @@ class RestaurantControllerTests {
     @MockBean
     private RestaurantService restaurantService;
 
-    private List<Restaurant> restaurants;
-    private Restaurant ramen;
-
-    @BeforeEach
-    public void init() {
-        restaurants = new ArrayList<>();
-        Restaurant bobZip = Restaurant.builder()
-                .id(1L)
-                .name("Bob Zip")
-                .address("Busan")
-                .build();
-
-        ramen = Restaurant.builder()
-                .id(2L)
-                .name("Korean Ramen")
-                .address("Incheon")
-                .build();
-
-        ramen.addMenuItem(MenuItem.builder().id(1L).restaurantId(2L).name("Kimchi").build());
-
-        restaurants.add(bobZip);
-        restaurants.add(ramen);
-    }
-
     @Test
     public void list() throws Exception {
-        Mockito.when(restaurantService.getRestaurants()).thenReturn(restaurants);
+        List<Restaurant> restaurants = new ArrayList<>();
+        restaurants.add(Restaurant.builder()
+                .id(1004L)
+                .name("JOKER House")
+                .address("Seoul")
+                .build());
+
+        restaurants.add(Restaurant.builder()
+                .id(2020L)
+                .name("Korean Ramen")
+                .address("Busan")
+                .build());
+
+        given(restaurantService.getRestaurants()).willReturn(restaurants);
 
         mvc.perform(get("/restaurants"))
                 .andExpect(status().isOk())
-                .andExpect(content().string(containsString("\"id\":1")))
-                .andExpect(content().string(containsString("\"name\":\"Bob Zip\"")));
+                .andExpect(content().string(
+                        containsString("\"id\":1004")
+                ))
+                .andExpect(content().string(
+                        containsString("\"name\":\"JOKER House\"")
+                ));
     }
 
     @Test
     public void detail() throws Exception {
-        Mockito.when(restaurantService.getRestaurant(2L)).thenReturn(ramen);
+        Restaurant restaurant = Restaurant.builder()
+                .id(1004L)
+                .name("JOKER House")
+                .address("Seoul")
+                .build();
 
-        mvc.perform(get("/restaurant/2"))
+        given(restaurantService.getRestaurant(1004L)).willReturn(restaurant);
+
+        mvc.perform(get("/restaurant/1004"))
                 .andExpect(status().isOk())
-                .andExpect(content().string(containsString("\"id\":2")))
-                .andExpect(content().string(containsString("\"name\":\"Korean Ramen\"")))
-                .andExpect(content().string(containsString("Kimchi")));
+                .andExpect(content().string(
+                        containsString("\"id\":1004")
+                ))
+                .andExpect(content().string(
+                        containsString("\"name\":\"JOKER House\"")
+                ));
     }
 
     @Test
     public void create() throws Exception {
         given(restaurantService.createRestaurant(any())).will(invocation -> {
             Restaurant restaurant = invocation.getArgument(0);
-            return new Restaurant(1L, restaurant.getName(), restaurant.getAddress());
+            return Restaurant.builder()
+                    .id(1234L)
+                    .name(restaurant.getName())
+                    .address(restaurant.getAddress())
+                    .build();
         });
 
-        mvc.perform(post("/restaurant/")
+        mvc.perform(post("/restaurant")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\n" +
-                    "            \"name\" : \"Alien Food\",\n" +
-                    "            \"address\" : \"Universe\"\n" +
-                    "        }"))
+                .content("{\"name\":\"Beryong\"," +
+                        "\"address\":\"Busan\"}"))
                 .andExpect(status().isOk())
-//                .andExpect(header().string("location", "/restaurant/1"))
-                .andExpect(content().string(containsString("\"id\":1")))
-                .andExpect(content().string(containsString("\"name\":\"Alien Food\"")));
+//                .andExpect(header().string("location", "/restaurant/1234"))
+                .andExpect(content().string(containsString("\"id\":1234")))
+                .andExpect(content().string(containsString("\"name\":\"Beryong\"")));
 
         verify(restaurantService).createRestaurant(any());
     }
 
+    @Test
+    public void update() throws Exception {
+        mvc.perform(patch("/restaurant/1004")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"name\":\"Ghost House\", \"address\":\"Thailand\"}"))
+                .andExpect(status().isOk());
+
+        verify(restaurantService).updateRestaurant(anyLong(), any());
+    }
 
 }

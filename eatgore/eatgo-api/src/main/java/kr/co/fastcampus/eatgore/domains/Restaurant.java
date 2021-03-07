@@ -38,4 +38,13 @@ public class Restaurant {
             addMenuItem(menuItem);
         }
     }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setInformation(Restaurant restaurant) {
+        this.name = restaurant.getName();
+        this.address = restaurant.getAddress();
+    }
 }
