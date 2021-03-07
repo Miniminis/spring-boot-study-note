@@ -83,8 +83,10 @@ class RestaurantControllerTests {
                         containsString("\"name\":\"JOKER House\"")
                 ))
                 .andExpect(content().string(
-                        containsString("\"menuItems\":[{\"id\":1,\"restaurantId\":1004,\"name\":\"Bibim Bob\"}]")
+                        containsString("\"menuItems\":[{\"id\":1,\"restaurantId\":1004,\"name\":\"Bibim Bob\",\"destroy\":false}]")
                 ));
+
+
     }
 
     @Test
