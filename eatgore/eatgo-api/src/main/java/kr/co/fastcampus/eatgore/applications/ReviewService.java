@@ -11,6 +11,7 @@ public class ReviewService {
     private ReviewRepository reviewRepository;
 
     public Review addReview(Long restaurantId, Review review) {
+        review.setRestaurantId(restaurantId);
         return reviewRepository.save(review);
     }
 }

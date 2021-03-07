@@ -59,6 +59,13 @@ class RestaurantControllerTests {
 
     @Test
     public void detailWithExisted() throws Exception {
+        Review review = Review.builder()
+                .id(1L)
+                .restaurantId(1004L)
+                .name("tester")
+                .score(3)
+                .description("So so...").build();
+
         MenuItem menuitem = MenuItem.builder()
                 .id(1L)
                 .restaurantId(1004L)
@@ -70,6 +77,7 @@ class RestaurantControllerTests {
                 .name("JOKER House")
                 .address("Seoul")
                 .menuItems(Arrays.asList(menuitem))
+                .reviews(Arrays.asList(review))
                 .build();
 
         given(restaurantService.getRestaurant(1004L)).willReturn(restaurant);
@@ -84,9 +92,10 @@ class RestaurantControllerTests {
                 ))
                 .andExpect(content().string(
                         containsString("\"menuItems\":[{\"id\":1,\"restaurantId\":1004,\"name\":\"Bibim Bob\",\"destroy\":false}]")
+                ))
+                .andExpect(content().string(
+                        containsString("\"reviews\":[{\"id\":1,\"restaurantId\":1004,\"name\":\"tester\",\"score\":3,\"description\":\"So so...\"}]")
                 ));
-
-
     }
 
     @Test

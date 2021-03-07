@@ -1,9 +1,6 @@
 package kr.co.fastcampus.eatgore.domains;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -22,12 +19,15 @@ public class Review {
     @GeneratedValue
     private Long id;
 
+    @Setter
+    private Long restaurantId;
+
     @NotEmpty
     @NotNull
     private String name;
 
     @NotNull
-    private int score;
+    private Integer score;
 
     @NotNull
     @NotEmpty

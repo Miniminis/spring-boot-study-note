@@ -15,6 +15,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(ReviewController.class)
@@ -31,6 +32,7 @@ class ReviewControllerTest {
         given(reviewService.addReview(eq(123L), any()))
                 .willReturn(Review.builder()
                         .id(1L)
+                        .restaurantId(123L)
                         .name("mhson")
                         .score(4)
                         .description("존맛탱")
@@ -43,6 +45,7 @@ class ReviewControllerTest {
                             "    \"score\": 5,\n" +
                             "    \"description\": \"완전맛있어요!\"\n" +
                             "}"))
+                    .andExpect(header().string("location", "/restaurant/123/reviews/1"))
                     .andExpect(status().isCreated());
 
         verify(reviewService).addReview(eq(123L), any());

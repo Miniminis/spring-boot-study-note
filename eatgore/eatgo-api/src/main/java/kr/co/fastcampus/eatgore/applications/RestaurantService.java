@@ -17,6 +17,9 @@ public class RestaurantService {
     @Autowired
     private MenuItemRepository menuItemRepository;
 
+    @Autowired
+    private ReviewRepository reviewRepository;
+
     public List<Restaurant> getRestaurants() {
         return restaurantRepository.findAll();
     }
@@ -27,6 +30,9 @@ public class RestaurantService {
 
         List<MenuItem> menuItems = menuItemRepository.findByRestaurantId(id);
         restaurant.setMenuItems(menuItems);
+
+        List<Review> reviews = reviewRepository.findAllByRestaurantId(id);
+        restaurant.setReview(reviews);
 
         return restaurant;
     }

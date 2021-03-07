@@ -8,6 +8,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,7 +16,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 
 class RestaurantServiceTest {
 
@@ -28,11 +31,40 @@ class RestaurantServiceTest {
     @Mock
     private MenuItemRepository menuItemRepository;
 
+    @Mock
+    private ReviewRepository reviewRepository;
+
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
 
         mockRestaurantRepository();
+        mockMenuItemsRepository();
+        mockReviewRepository();
+    }
+
+    private void mockReviewRepository() {
+        List<Review> reviews = new ArrayList<>();
+        reviews.add(Review.builder()
+                .id(1L)
+                .restaurantId(1004L)
+                .name("tester")
+                .score(1)
+                .description("핵 맛없음. 최악").build());
+
+        given(reviewRepository.findAllByRestaurantId(1004L)).willReturn(reviews);
+    }
+
+    private void mockMenuItemsRepository() {
+        List<MenuItem> menuItems = new ArrayList<>();
+        menuItems.add(MenuItem.builder()
+                .id(1L)
+                .restaurantId(1004L)
+                .name("Gook Bob")
+                .destroy(false)
+                .build());
+        given(menuItemRepository.findByRestaurantId(eq(1004L)))
+                .willReturn(menuItems);
     }
 
     private void mockRestaurantRepository() {
@@ -64,13 +96,15 @@ class RestaurantServiceTest {
     public void getRestaurantWithExisted() {
         Restaurant restaurant = restaurantService.getRestaurant(1004L);
 
-        given(menuItemRepository.findByRestaurantId(1004L)).will(invocation -> {
-            List<MenuItem> menuItems = invocation.getArgument(0);
-            restaurant.setMenuItems(menuItems);
-            return menuItems;
-        });
+//        given(menuItemRepository.findByRestaurantId(1004L)).will(invocation -> {
+//            List<MenuItem> menuItems = invocation.getArgument(0);
+//            restaurant.setMenuItems(menuItems);
+//            return menuItems;
+//        });
 
         assertThat(restaurant.getId()).isEqualTo(1004L);
+        assertThat(restaurant.getMenuItems().get(0).getName()).isEqualTo("Gook Bob");
+        assertThat(restaurant.getReviews().get(0).getDescription()).isEqualTo("핵 맛없음. 최악");
     }
 
     @Test

@@ -8,6 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,12 +35,20 @@ public class Restaurant {
     @Transient
     private List<MenuItem> menuItems;
 
-    public void setMenuItems(List<MenuItem> menuItems) {
-        this.menuItems = new ArrayList<>(menuItems);
-    }
+    @Transient
+    private List<Review> reviews;
 
     public void setInformation(Restaurant restaurant) {
         this.name = restaurant.getName();
         this.address = restaurant.getAddress();
     }
+
+    public void setMenuItems(List<MenuItem> menuItems) {
+        this.menuItems = new ArrayList<>(menuItems);
+    }
+
+    public void setReview(List<Review> reviews) {
+        this.reviews = new ArrayList<>(reviews);
+    }
+
 }
