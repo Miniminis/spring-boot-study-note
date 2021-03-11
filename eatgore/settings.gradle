@@ -1,2 +1,3 @@
 rootProject.name = 'eatgore'
-include 'eatgo-api'
+include 'eatgo-common'
+include 'eatgo-admin-api'
