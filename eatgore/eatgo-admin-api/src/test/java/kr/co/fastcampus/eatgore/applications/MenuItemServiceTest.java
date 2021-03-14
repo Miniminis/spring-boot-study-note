@@ -15,6 +15,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
@@ -29,30 +30,34 @@ class MenuItemServiceTest {
     @Mock
     private MenuItemRepository menuItemRepository;
 
-    @Mock
-    private RestaurantRepository restaurantRepository;
-
     @BeforeEach
-    public void setUp() {
+    public void initMock() {
         MockitoAnnotations.openMocks(this);
-
-        mockRestaurantRepository();
+        mockMenuItemRepository();
     }
 
-    private void mockRestaurantRepository() {
-        List<Restaurant> restaurants = new ArrayList<>();
-        Restaurant restaurant = Restaurant.builder()
+    private void mockMenuItemRepository() {
+        List<MenuItem> menuItems = new ArrayList<>();
+        MenuItem menuKimchi = MenuItem.builder()
                 .id(1L)
-                .address("Seoul")
-                .name("Bob zip")
-                .menuItems(Arrays.asList(MenuItem.builder().id(1L).restaurantId(1L).name("Kimchi").build()))
+                .restaurantId(1004L)
+                .name("Kimchi")
                 .build();
-        restaurants.add(restaurant);
+        menuItems.add(menuKimchi);
 
-        given(restaurantRepository.findAll()).willReturn(restaurants);
+        given(menuItemRepository.findByRestaurantId(1004L))
+                .willReturn(menuItems);
+        given(menuItemRepository.findById(1L))
+                .willReturn(Optional.ofNullable(menuKimchi));
+    }
 
-        given(restaurantRepository.findById(1L))
-                .willReturn(Optional.of(restaurant));
+    @Test
+    void getMenuListTest() {
+        List<MenuItem> menuItems = menuItemService.getMenuList(1004L);
+        MenuItem menuItem = menuItems.get(0);
+        assertThat(menuItem.getId()).isEqualTo(1L);
+        assertThat(menuItem.getRestaurantId()).isEqualTo(1004L);
+        assertThat(menuItem.getName()).isEqualTo("Kimchi");
     }
 
     @Test

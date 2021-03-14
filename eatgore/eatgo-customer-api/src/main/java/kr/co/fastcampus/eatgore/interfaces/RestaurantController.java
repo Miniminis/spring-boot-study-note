@@ -16,23 +16,13 @@ public class RestaurantController {
     private RestaurantService restaurantService;
 
     @GetMapping("/restaurants")
-    public List<Restaurant> list() {
+    public List<Restaurant> getRestaurants() {
         return restaurantService.getRestaurants();
     }
 
     @GetMapping("/restaurant/{id}")
-    public Restaurant detail(@PathVariable("id") Long id) {
+    public Restaurant getDetail(@PathVariable("id") Long id) {
         return restaurantService.getRestaurant(id);
-    }
-
-    @PostMapping("/restaurant")
-    public Restaurant create(@Valid @RequestBody Restaurant restaurant) {
-        return restaurantService.createRestaurant(restaurant);
-    }
-
-    @PatchMapping("/restaurant/{id}")
-    public Restaurant update(@PathVariable Long id, @Valid @RequestBody Restaurant restaurant) {
-        return restaurantService.updateRestaurant(id, restaurant);
     }
 
 }

@@ -2,6 +2,7 @@ package kr.co.fastcampus.eatgore.interfaces;
 
 import kr.co.fastcampus.eatgore.applications.RestaurantService;
 import kr.co.fastcampus.eatgore.domains.*;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -30,35 +31,10 @@ class RestaurantControllerTests {
     @MockBean
     private RestaurantService restaurantService;
 
-    @Test
-    public void list() throws Exception {
+    @BeforeEach
+    void initMockBeanData() {
         List<Restaurant> restaurants = new ArrayList<>();
-        restaurants.add(Restaurant.builder()
-                .id(1004L)
-                .name("JOKER House")
-                .address("Seoul")
-                .build());
 
-        restaurants.add(Restaurant.builder()
-                .id(2020L)
-                .name("Korean Ramen")
-                .address("Busan")
-                .build());
-
-        given(restaurantService.getRestaurants()).willReturn(restaurants);
-
-        mvc.perform(get("/restaurants"))
-                .andExpect(status().isOk())
-                .andExpect(content().string(
-                        containsString("\"id\":1004")
-                ))
-                .andExpect(content().string(
-                        containsString("\"name\":\"JOKER House\"")
-                ));
-    }
-
-    @Test
-    public void detailWithExisted() throws Exception {
         Review review = Review.builder()
                 .id(1L)
                 .restaurantId(1004L)
@@ -72,7 +48,7 @@ class RestaurantControllerTests {
                 .name("Bibim Bob")
                 .build();
 
-        Restaurant restaurant = Restaurant.builder()
+        Restaurant angelRestaurant = Restaurant.builder()
                 .id(1004L)
                 .name("JOKER House")
                 .address("Seoul")
@@ -80,8 +56,35 @@ class RestaurantControllerTests {
                 .reviews(Arrays.asList(review))
                 .build();
 
-        given(restaurantService.getRestaurant(1004L)).willReturn(restaurant);
+        Restaurant ramenRestaurant = Restaurant.builder()
+                .id(2020L)
+                .name("Korean Ramen")
+                .address("Busan")
+                .build();
 
+        restaurants.add(angelRestaurant);
+        restaurants.add(ramenRestaurant);
+
+        given(restaurantService.getRestaurants()).willReturn(restaurants);
+        given(restaurantService.getRestaurant(1004L))
+                .willReturn(angelRestaurant);
+
+    }
+
+    @Test
+    public void list() throws Exception {
+        mvc.perform(get("/restaurants"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(
+                        containsString("\"id\":1004")
+                ))
+                .andExpect(content().string(
+                        containsString("\"name\":\"JOKER House\"")
+                ));
+    }
+
+    @Test
+    public void detailWithExisted() throws Exception {
         mvc.perform(get("/restaurant/1004"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(
@@ -100,7 +103,8 @@ class RestaurantControllerTests {
 
     @Test
     public void detailWithNotExisted() throws Exception {
-        given(restaurantService.getRestaurant(365L)).willThrow(new RestaurantNotFoundException(365L));
+        given(restaurantService.getRestaurant(365L))
+                .willThrow(new RestaurantNotFoundException(365L));
 
         mvc.perform(get("/restaurant/365"))
                 .andExpect(status().isNotFound())

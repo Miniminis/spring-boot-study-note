@@ -23,20 +23,4 @@ public class RestaurantService {
 
         return restaurant;
     }
-
-    public Restaurant createRestaurant(Restaurant restaurant) {
-        if(restaurant == null) {
-            return Restaurant.builder().build();
-        }
-
-        return restaurantRepository.save(restaurant);
-    }
-
-    @Transactional
-    public Restaurant updateRestaurant(Long id, Restaurant restaurant) {
-        Restaurant foundRestaurant = restaurantRepository.findById(id).orElse(null);
-        foundRestaurant.setInformation(restaurant);
-
-        return foundRestaurant;
-    }
 }

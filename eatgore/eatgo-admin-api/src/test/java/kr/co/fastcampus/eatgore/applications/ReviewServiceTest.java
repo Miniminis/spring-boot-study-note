@@ -10,7 +10,12 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -23,20 +28,41 @@ class ReviewServiceTest {
     private ReviewRepository reviewRepository;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         MockitoAnnotations.openMocks(this);
+        mockReviewRepository();
+    }
+
+    private void mockReviewRepository() {
+        List<Review> reviews = new ArrayList<>();
+        Review review= Review.builder()
+                .id(1L)
+                .name("stranger")
+                .score(5)
+                .description("Awesome")
+                .build();
+
+        Review anotherReview = Review.builder()
+                .id(2L)
+                .name("passenger")
+                .score(2)
+                .description("Terrible")
+                .build();
+
+        reviews.add(review);
+        reviews.add(anotherReview);
+
+        given(reviewRepository.findAll()).willReturn(reviews);
     }
 
     @Test
-    public void addReview() {
-        Review review = Review.builder()
-                .id(1L)
-                .score(5)
-                .description("완전 환상의 맛!")
-                .build();
-
-        reviewService.addReview(1L, review);
-
-        verify(reviewRepository, times(1)).save(review);
+    void getReviewTest() {
+        List<Review> reviews = reviewService.getReviews();
+        Review review = reviews.get(0);
+        assertThat(review.getId()).isEqualTo(1L);
+        assertThat(review.getName()).isEqualTo("stranger");
+        assertThat(review.getScore()).isEqualTo(5);
+        assertThat(review.getDescription()).isEqualTo("Awesome");
     }
+
 }
