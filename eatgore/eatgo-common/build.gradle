@@ -34,11 +34,11 @@ dependencies {
 }
 
 jar {
-    enabled = true
+    enabled = true       //eatgo-admin-api 에서 사용할 수 있도록 jar file enabled
 }
 
 bootJar {
-    enabled = false
+    enabled = false     //eatgo-admin-api 에서 사용할 수 있도록 bootJar disabled
 }
 
 test {
