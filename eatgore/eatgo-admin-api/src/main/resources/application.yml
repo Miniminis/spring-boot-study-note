@@ -8,7 +8,8 @@ spring:
 ---
 
 spring:
-  profiles:
-    active: test
+  config:
+    activate:
+      on-profile: test
   datasource:
     url: jdbc:h2:mem:test
