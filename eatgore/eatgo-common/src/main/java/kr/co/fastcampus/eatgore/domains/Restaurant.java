@@ -47,7 +47,7 @@ public class Restaurant {
         this.menuItems = new ArrayList<>(menuItems);
     }
 
-    public void setReview(List<Review> reviews) {
+    public void setReviews(List<Review> reviews) {
         this.reviews = new ArrayList<>(reviews);
     }
 
