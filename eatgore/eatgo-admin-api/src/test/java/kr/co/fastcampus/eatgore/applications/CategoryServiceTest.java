@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -39,16 +40,31 @@ class CategoryServiceTest {
         categories.add(category);
 
         given(categoryRepository.findAll()).willReturn(categories);
+        given(categoryRepository.save(any())).will(invocation -> invocation.getArgument(0));
     }
 
     @Test
-    void getCategoriesTest() {
+    void 카테고리_목록_서비스() {
         List<Category> categories = categoryService.getCategories();
         Category category = categories.get(0);
+
         assertThat(category.getId()).isEqualTo(1L);
         assertThat(category.getName()).isEqualTo("Asian");
 
         verify(categoryRepository).findAll();
+    }
+
+    @Test
+    void 카테고리_생성_서비스() {
+        Category category = Category.builder()
+                .name("Asian")
+                .build();
+
+        Category newCategory = categoryService.createCategory(category);
+
+        verify(categoryRepository).save(any());
+
+        assertThat(newCategory.getName()).isEqualTo("Asian");
     }
 
 }
