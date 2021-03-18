@@ -98,9 +98,18 @@ class RestaurantServiceTest {
                 .address("Seoul")
                 .name("Bob zip")
                 .build();
+
+        Restaurant busanRestaurant = Restaurant.builder()
+                .id(2021L)
+                .address("Busan")
+                .name("Busan Gookbob")
+                .build();
+
         restaurants.add(restaurant);
+        restaurants.add(busanRestaurant);
 
         given(restaurantRepository.findAll()).willReturn(restaurants);
+        given(restaurantRepository.findAllByAddressContaining("Busan")).willReturn(restaurants);
 
         given(restaurantRepository.findById(1004L))
                 .willReturn(Optional.of(restaurant));
@@ -110,7 +119,7 @@ class RestaurantServiceTest {
 
     @Test
     public void getRestaurants() {
-        List<Restaurant> restaurants = restaurantService.getRestaurants();
+        List<Restaurant> restaurants = restaurantService.getRestaurants("Busan");
         Restaurant restaurant = restaurants.get(0);
 
         assertThat(restaurant.getId()).isEqualTo(1004L);

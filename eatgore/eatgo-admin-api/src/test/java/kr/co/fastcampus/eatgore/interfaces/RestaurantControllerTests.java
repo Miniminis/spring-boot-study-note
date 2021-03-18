@@ -73,7 +73,7 @@ class RestaurantControllerTests {
 
     @Test
     public void list() throws Exception {
-        mvc.perform(get("/restaurants"))
+        mvc.perform(get("/restaurants?region=busan"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(
                         containsString("\"id\":1004")

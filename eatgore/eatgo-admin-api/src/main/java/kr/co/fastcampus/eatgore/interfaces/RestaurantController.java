@@ -1,6 +1,7 @@
 package kr.co.fastcampus.eatgore.interfaces;
 
 import kr.co.fastcampus.eatgore.applications.RestaurantService;
+import kr.co.fastcampus.eatgore.domains.Region;
 import kr.co.fastcampus.eatgore.domains.Restaurant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
