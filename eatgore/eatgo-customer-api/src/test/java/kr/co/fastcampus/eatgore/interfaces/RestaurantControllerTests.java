@@ -50,9 +50,10 @@ class RestaurantControllerTests {
                 .address("Busan")
                 .build());
 
-        given(restaurantService.getRestaurants("Busan")).willReturn(restaurants);
+        given(restaurantService.getRestaurants("Busan", 1L))
+                .willReturn(restaurants);
 
-        mvc.perform(get("/restaurants?region=Busan"))
+        mvc.perform(get("/restaurants?region=Busan&categoryId=1"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(
                         containsString("\"id\":1004")

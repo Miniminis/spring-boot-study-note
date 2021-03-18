@@ -17,8 +17,10 @@ public class RestaurantController {
     private RestaurantService restaurantService;
 
     @GetMapping("/restaurants")
-    public List<Restaurant> getRestaurants(@RequestParam("region") String region) {
-        return restaurantService.getRestaurants(region);
+    public List<Restaurant> getRestaurants(@RequestParam("region") String region,
+                                           @RequestParam("categoryId") Long categoryId) {
+
+        return restaurantService.getRestaurants(region, categoryId);
     }
 
     @GetMapping("/restaurant/{id}")

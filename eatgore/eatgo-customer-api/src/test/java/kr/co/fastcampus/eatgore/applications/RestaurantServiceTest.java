@@ -109,17 +109,17 @@ class RestaurantServiceTest {
         restaurants.add(busanRestaurant);
 
         given(restaurantRepository.findAll()).willReturn(restaurants);
-        given(restaurantRepository.findAllByAddressContaining("Busan")).willReturn(restaurants);
+        given(restaurantRepository.findAllByAddressContainingAndCategoryId("Busan", 1L))
+                .willReturn(restaurants);
 
         given(restaurantRepository.findById(1004L))
                 .willReturn(Optional.of(restaurant));
     }
 
 
-
     @Test
     public void getRestaurants() {
-        List<Restaurant> restaurants = restaurantService.getRestaurants("Busan");
+        List<Restaurant> restaurants = restaurantService.getRestaurants("Busan", 1L);
         Restaurant restaurant = restaurants.get(0);
 
         assertThat(restaurant.getId()).isEqualTo(1004L);
