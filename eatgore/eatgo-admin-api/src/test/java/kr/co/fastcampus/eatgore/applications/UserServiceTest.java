@@ -35,6 +35,7 @@ class UserServiceTest {
                 .name("TESTER")
                 .email("tester@test.com")
                 .password("tester1234")
+                .level(1L)
                 .build();
 
         given(userRepository.save(any())).willReturn(user);

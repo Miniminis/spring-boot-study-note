@@ -1,6 +1,7 @@
 package kr.co.fastcampus.eatgore.applications;
 
 import kr.co.fastcampus.eatgore.domains.User;
+import kr.co.fastcampus.eatgore.domains.EmailExistedException;
 import kr.co.fastcampus.eatgore.domains.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,8 +12,10 @@ import org.mockito.MockitoAnnotations;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 class UserServiceTest {
@@ -56,6 +59,24 @@ class UserServiceTest {
         assertThat(createdUser.getEmail()).isEqualTo("tester@test.com");
 
         verify(userRepository).save(any());
+    }
+
+    @Test
+    void 사용자_생성시_이메일_중복될떄() {
+        User user = User.builder()
+                .id(1L)
+                .name("TESTER")
+                .email("tester@test.com")
+                .password("tester1234")
+                .build();
+
+        given(userRepository.findByEmail(any())).willReturn(Optional.of(user));
+
+        assertThatThrownBy(() -> {
+            userService.createUser(user);
+        }).isInstanceOf(EmailExistedException.class);
+
+        verify(userRepository, never()).save(any());
     }
 
 }

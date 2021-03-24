@@ -17,10 +17,10 @@ public class UserController {
 
     @PostMapping("/user")
     public ResponseEntity<?> create(@RequestBody User user) throws URISyntaxException {
-        userService.createUser(user);
+        User createdUser = userService.createUser(user);
 
         URI location = new URI("/user");
-        return ResponseEntity.created(location).body("{}");
+        return ResponseEntity.created(location).body(createdUser);
     }
 
 }

@@ -36,6 +36,7 @@ class UserControllerTest {
                 .name("TESTER")
                 .email("tester@test.com")
                 .password("tester1234")
+                .level(1L)
                 .build();
 
         given(userService.getUserDetail(1L)).willReturn(user);

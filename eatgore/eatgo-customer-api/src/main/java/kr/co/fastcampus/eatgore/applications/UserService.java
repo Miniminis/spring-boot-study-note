@@ -1,9 +1,15 @@
 package kr.co.fastcampus.eatgore.applications;
 
+import kr.co.fastcampus.eatgore.domains.EmailExistedException;
 import kr.co.fastcampus.eatgore.domains.User;
 import kr.co.fastcampus.eatgore.domains.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import javax.jws.soap.SOAPBinding;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -12,6 +18,21 @@ public class UserService {
     private UserRepository userRepository;
 
     public User createUser(User user) {
-        return userRepository.save(user);
+        Optional<User> selectedUSer = userRepository.findByEmail(user.getEmail());
+        if (selectedUSer.isPresent()) {
+            throw new EmailExistedException(selectedUSer.get().getEmail());
+        }
+
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String encodedPassword = passwordEncoder.encode(user.getPassword());
+
+        User newUser = User.builder()
+                .name(user.getName())
+                .email(user.getEmail())
+                .password(encodedPassword)
+                .level(user.getLevel())
+                .build();
+
+        return userRepository.save(newUser);
     }
 }

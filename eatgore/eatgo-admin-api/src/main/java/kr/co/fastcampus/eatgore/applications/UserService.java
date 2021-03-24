@@ -16,9 +16,9 @@ public class UserService {
     }
 
     public User getUserDetail(Long id) {
-        User user = userRepository.findById(id).orElse(null);
+        User user = userRepository.findById(id).orElseGet(null);
 
-        if(!user.isActivate()) {
+        if (!user.isActivate()) {
             return null;
         }
 
