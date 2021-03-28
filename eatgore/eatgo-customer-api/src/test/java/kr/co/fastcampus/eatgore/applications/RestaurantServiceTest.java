@@ -1,6 +1,10 @@
 package kr.co.fastcampus.eatgore.applications;
 
 import kr.co.fastcampus.eatgore.domains.*;
+import kr.co.fastcampus.eatgore.domains.exceptions.RestaurantNotFoundException;
+import kr.co.fastcampus.eatgore.repositories.MenuItemRepository;
+import kr.co.fastcampus.eatgore.repositories.RestaurantRepository;
+import kr.co.fastcampus.eatgore.repositories.ReviewRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

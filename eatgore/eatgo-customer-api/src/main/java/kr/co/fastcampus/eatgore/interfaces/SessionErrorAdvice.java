@@ -1,7 +1,7 @@
 package kr.co.fastcampus.eatgore.interfaces;
 
-import kr.co.fastcampus.eatgore.domains.EmailDoesNotExistedException;
-import kr.co.fastcampus.eatgore.domains.WrongPasswordException;
+import kr.co.fastcampus.eatgore.domains.exceptions.EmailDoesNotExistedException;
+import kr.co.fastcampus.eatgore.domains.exceptions.WrongPasswordException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;

@@ -1,6 +1,8 @@
 package kr.co.fastcampus.eatgore.applications;
 
 import kr.co.fastcampus.eatgore.domains.*;
+import kr.co.fastcampus.eatgore.domains.exceptions.RestaurantNotFoundException;
+import kr.co.fastcampus.eatgore.repositories.RestaurantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

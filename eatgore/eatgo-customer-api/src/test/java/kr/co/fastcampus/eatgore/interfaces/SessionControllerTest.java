@@ -1,8 +1,8 @@
 package kr.co.fastcampus.eatgore.interfaces;
 
 import kr.co.fastcampus.eatgore.applications.UserService;
-import kr.co.fastcampus.eatgore.domains.EmailDoesNotExistedException;
-import kr.co.fastcampus.eatgore.domains.WrongPasswordException;
+import kr.co.fastcampus.eatgore.domains.exceptions.EmailDoesNotExistedException;
+import kr.co.fastcampus.eatgore.domains.exceptions.WrongPasswordException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;

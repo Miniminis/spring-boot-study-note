@@ -1,9 +1,7 @@
 package kr.co.fastcampus.eatgore.applications;
 
 import kr.co.fastcampus.eatgore.domains.MenuItem;
-import kr.co.fastcampus.eatgore.domains.MenuItemRepository;
-import kr.co.fastcampus.eatgore.domains.Restaurant;
-import kr.co.fastcampus.eatgore.domains.RestaurantRepository;
+import kr.co.fastcampus.eatgore.repositories.MenuItemRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -11,7 +9,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 

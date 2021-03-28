@@ -1,7 +1,7 @@
 package kr.co.fastcampus.eatgore.applications;
 
 import kr.co.fastcampus.eatgore.domains.Region;
-import kr.co.fastcampus.eatgore.domains.RegionRepository;
+import kr.co.fastcampus.eatgore.repositories.RegionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

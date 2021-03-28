@@ -1,14 +1,13 @@
 package kr.co.fastcampus.eatgore.applications;
 
-import kr.co.fastcampus.eatgore.domains.EmailExistedException;
+import kr.co.fastcampus.eatgore.domains.exceptions.EmailExistedException;
 import kr.co.fastcampus.eatgore.domains.User;
-import kr.co.fastcampus.eatgore.domains.UserRepository;
+import kr.co.fastcampus.eatgore.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.jws.soap.SOAPBinding;
 import java.util.Optional;
 
 @Service

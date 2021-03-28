@@ -2,6 +2,7 @@ package kr.co.fastcampus.eatgore.interfaces;
 
 import kr.co.fastcampus.eatgore.applications.RestaurantService;
 import kr.co.fastcampus.eatgore.domains.*;
+import kr.co.fastcampus.eatgore.domains.exceptions.RestaurantNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

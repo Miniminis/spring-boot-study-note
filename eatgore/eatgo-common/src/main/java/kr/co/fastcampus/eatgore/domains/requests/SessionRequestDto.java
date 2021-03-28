@@ -1,4 +1,4 @@
-package kr.co.fastcampus.eatgore.domains;
+package kr.co.fastcampus.eatgore.domains.requests;
 
 import lombok.Data;
 

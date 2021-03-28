@@ -1,5 +1,6 @@
-package kr.co.fastcampus.eatgore.domains;
+package kr.co.fastcampus.eatgore.repositories;
 
+import kr.co.fastcampus.eatgore.domains.Restaurant;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.CrudRepository;
 

@@ -1,7 +1,7 @@
 package kr.co.fastcampus.eatgore.applications;
 
 import kr.co.fastcampus.eatgore.domains.Review;
-import kr.co.fastcampus.eatgore.domains.ReviewRepository;
+import kr.co.fastcampus.eatgore.repositories.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -1,8 +1,7 @@
 package kr.co.fastcampus.eatgore.applications;
 
-import kr.co.fastcampus.eatgore.applications.ReviewService;
 import kr.co.fastcampus.eatgore.domains.Review;
-import kr.co.fastcampus.eatgore.domains.ReviewRepository;
+import kr.co.fastcampus.eatgore.repositories.ReviewRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

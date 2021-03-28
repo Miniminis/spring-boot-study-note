@@ -1,9 +1,8 @@
 package kr.co.fastcampus.eatgore.interfaces;
 
 import kr.co.fastcampus.eatgore.applications.UserService;
-import kr.co.fastcampus.eatgore.domains.SessionRequestDto;
-import kr.co.fastcampus.eatgore.domains.SessionResponseDto;
-import kr.co.fastcampus.eatgore.domains.User;
+import kr.co.fastcampus.eatgore.domains.requests.SessionRequestDto;
+import kr.co.fastcampus.eatgore.domains.responses.SessionResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
