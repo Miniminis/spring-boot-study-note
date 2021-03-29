@@ -22,8 +22,6 @@ public class Review {
     @Setter
     private Long restaurantId;
 
-    @NotEmpty
-    @NotNull
     private String name;
 
     @NotNull

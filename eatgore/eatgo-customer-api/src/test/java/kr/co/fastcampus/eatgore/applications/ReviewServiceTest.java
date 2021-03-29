@@ -8,6 +8,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -26,14 +29,25 @@ class ReviewServiceTest {
 
     @Test
     public void addReview() {
+        Review madeReview = Review.builder()
+                .id(1L)
+                .restaurantId(1L)
+                .name("testReviewer")
+                .score(5)
+                .description("완전 환상의 맛!")
+                .build();
+
         Review review = Review.builder()
                 .id(1L)
                 .score(5)
                 .description("완전 환상의 맛!")
                 .build();
 
-        reviewService.addReview(1L, review);
+        given(reviewRepository.save(any())).willReturn(madeReview);
+        Review savedReview = reviewService.addReview(1L, review, "testReviewer");
 
-        verify(reviewRepository, times(1)).save(review);
+        assertThat(savedReview.getName()).isEqualTo(madeReview.getName());
+
+        verify(reviewRepository).save(any());
     }
 }

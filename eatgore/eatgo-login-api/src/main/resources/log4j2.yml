@@ -1,0 +1,41 @@
+Configutation:
+  name: ZalivingYAMLConfigTest
+  status: warn
+
+  Properties:
+    Property:
+      name: log-path
+      value: "logs"
+
+  Appenders:
+    Console:
+      name: eatgo_log_console
+      target: SYSTEM_OUT
+      PatternLayout:
+        pattern: "[%level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n"
+    RollingFile:
+      - name: eatgore_log_file
+        fileName: ${log-path}/eatgore.log
+        filePattern: "logs/archive/eatgore.log.%d{yyyy-MM-dd-hh-mm-ss}.log"
+        PatternLayout:
+          pattern: "[%level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n"
+        Policies:
+          TimeBasedTriggeringPolicy:
+            interval: 20
+          SizeBasedTriggeringPolicy:
+            size: 1 KB
+#        DefaultRollOverStrategy:
+#          max: 6
+  Loggers:
+    Root:
+      level: info
+      AppenderRef:
+        - ref: eatgo_log_console
+        - ref: eatgore_log_file
+    Logger:
+      - name: kr.co.fastcampus.eatgore
+        additivity: false
+        level: debug
+        AppenderRef:
+          - ref: eatgo_log_console
+          - ref: eatgore_log_file

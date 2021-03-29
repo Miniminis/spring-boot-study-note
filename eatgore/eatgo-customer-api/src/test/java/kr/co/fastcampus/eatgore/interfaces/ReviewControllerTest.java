@@ -30,27 +30,26 @@ class ReviewControllerTest {
 
     @Test
     public void createWithValidData() throws Exception {
-        given(reviewService.addReview(eq(123L), any()))
-                .willReturn(Review.builder()
-                        .id(1L)
-                        .restaurantId(123L)
-                        .name("mhson")
-                        .score(4)
-                        .description("존맛탱")
-                        .build());
+        String token = "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjEwMDQsInVzZXJOYW1lIjoidGVzdGVyIn0.Q-dpPeV_d4nIHh_kyKkF6X8AnGyXHBsZ2fKo_4cDwNc";
+
+        Review review = Review.builder()
+                .score(5)
+                .description("완전맛있어요!")
+                .build();
+
+        given(reviewService.addReview(123L, review, "tester"))
+                .willReturn(Review.builder().id(1L).build());
 
         mvc.perform(post("/restaurant/123/reviews")
+                    .header("Authorization", "Bearer " + token)
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content("{\n" +
-                            "    \"name\": \"mhson\",\n" +
-                            "    \"score\": 5,\n" +
-                            "    \"description\": \"완전맛있어요!\"\n" +
-                            "}"))
-                    .andExpect(header().string("location", "/restaurant/123/reviews/1"))
-                    .andExpect(status().isCreated());
+                    .content("{\"score\":5, \"description\":\"완전맛있어요!\"}"))
+                    .andExpect(status().isCreated())
+                    .andExpect(header().string("location", "/restaurant/123/reviews/1"));
 
-        verify(reviewService).addReview(eq(123L), any());
+        verify(reviewService).addReview(123L, review, "tester");
     }
+
 
     @Test
     public void createWithInvalidData() throws Exception {
@@ -59,6 +58,6 @@ class ReviewControllerTest {
                 .content("{}"))
                 .andExpect(status().isBadRequest());
 
-        verify(reviewService, never()).addReview(eq(123L), any());
+        verify(reviewService, never()).addReview(eq(123L), any(), any());
     }
 }

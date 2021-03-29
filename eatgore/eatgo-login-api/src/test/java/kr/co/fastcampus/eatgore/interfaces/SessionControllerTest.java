@@ -4,6 +4,7 @@ import kr.co.fastcampus.eatgore.applications.UserService;
 import kr.co.fastcampus.eatgore.domains.User;
 import kr.co.fastcampus.eatgore.domains.exceptions.EmailDoesNotExistedException;
 import kr.co.fastcampus.eatgore.domains.exceptions.WrongPasswordException;
+import kr.co.fastcampus.eatgore.utils.JwtUtil;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -27,6 +28,9 @@ class SessionControllerTest {
     @MockBean
     private UserService userService;
 
+    @MockBean
+    private JwtUtil jwtUtil;
+
 
     @Test
     void 세션체크_유효한_데이터() throws Exception {
@@ -38,12 +42,15 @@ class SessionControllerTest {
         given(userService.authenticate(mockUser.getEmail(), mockUser.getPassword()))
                 .willReturn(mockUser);
 
-        mvc.perform(post("/session")
+        given(jwtUtil.createToken(mockUser.getId(), mockUser.getName()))
+                .willReturn("header.payload.signature");
+
+        mvc.perform(post("/login")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"email\":\"tester@test.com\", \"password\":\"pass123456789\"}"))
                 .andExpect(status().isCreated())
-                .andExpect(header().string("location", "/session"))
-                .andExpect(content().string("{\"accessToken\":\"pass123456\"}"));
+                .andExpect(header().string("location", "/login"))
+                .andExpect(content().string("{\"accessToken\":\"header.payload.signature\"}"));
 
         verify(userService).authenticate("tester@test.com", "pass123456789");
     }
@@ -53,7 +60,7 @@ class SessionControllerTest {
         given(userService.authenticate("tester@test.com", "x"))
                 .willThrow(WrongPasswordException.class);
 
-        mvc.perform(post("/session")
+        mvc.perform(post("/login")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"email\":\"tester@test.com\", \"password\":\"x\"}"))
                 .andExpect(status().isBadRequest());
@@ -66,7 +73,7 @@ class SessionControllerTest {
         given(userService.authenticate("x@test.com", "pass123"))
                 .willThrow(EmailDoesNotExistedException.class);
 
-        mvc.perform(post("/session")
+        mvc.perform(post("/login")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"email\":\"x@test.com\", \"password\":\"pass123\"}"))
                 .andExpect(status().isBadRequest());

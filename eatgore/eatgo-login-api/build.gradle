@@ -12,6 +12,9 @@ configurations {
     compileOnly {
         extendsFrom annotationProcessor
     }
+    all {
+        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'        //spring-boot 기본 logback 설정 제외
+    }
 }
 
 repositories {
@@ -19,14 +22,18 @@ repositories {
 }
 
 dependencies {
-    //jwt
-    implementation 'io.jsonwebtoken:jjwt-api:0.10.7'
+    implementation project(':eatgo-common')
 
-    runtime 'io.jsonwebtoken:jjwt-impl:0.10.7'
-    runtime 'io.jsonwebtoken:jjwt-jackson:0.10.7'
+    //log4j
+    compile 'org.springframework.boot:spring-boot-starter-log4j2'   // log4j2
+    compile group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-yaml', version: '2.10.3'   // log4j2 - yml설정을 위해 필요
 
+
+    //spring-boot-security
+    implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
 
+    //db
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'com.h2database:h2'
 
@@ -37,14 +44,6 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-}
-
-jar {
-    enabled = true       //eatgo-admin-api 에서 사용할 수 있도록 jar file enabled
-}
-
-bootJar {
-    enabled = false     //eatgo-admin-api 에서 사용할 수 있도록 bootJar disabled
 }
 
 test {
