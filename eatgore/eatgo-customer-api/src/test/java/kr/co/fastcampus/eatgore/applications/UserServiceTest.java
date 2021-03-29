@@ -1,13 +1,16 @@
 package kr.co.fastcampus.eatgore.applications;
 
 import kr.co.fastcampus.eatgore.domains.User;
+import kr.co.fastcampus.eatgore.domains.exceptions.EmailDoesNotExistedException;
 import kr.co.fastcampus.eatgore.domains.exceptions.EmailExistedException;
+import kr.co.fastcampus.eatgore.domains.exceptions.WrongPasswordException;
 import kr.co.fastcampus.eatgore.repositories.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
 
@@ -25,6 +28,9 @@ class UserServiceTest {
 
     @Mock
     private UserRepository userRepository;
+
+    @Mock
+    private PasswordEncoder passwordEncoder;
 
     @BeforeEach
     void initMock() {
@@ -79,7 +85,46 @@ class UserServiceTest {
         verify(userRepository, never()).save(any());
     }
 
-    
+    @Test
+    void 유효한_데이터로_사용자_인증_서비스() {
+        String email = "tester@test.com";
+        String password = "tester1234";
 
+        User mockUser = User.builder().email(email).password(password).build();
+
+        given(userRepository.findByEmail(email)).willReturn(Optional.of(mockUser));
+        given(passwordEncoder.matches(any(), any())).willReturn(true);
+
+        User user = userService.authenticate(email, password);
+
+        assertThat(user.getEmail()).isEqualTo(email);
+        assertThat(passwordEncoder.matches(password, user.getPassword())).isEqualTo(true);
+    }
+
+    @Test
+    void 이메일_오류_사용자_인증_서비스() {
+        String email = "wrong_email@test.com";
+        String password = "tester1234";
+
+        given(userRepository.findByEmail(email)).willReturn(Optional.empty());
+
+        assertThatThrownBy(() -> {
+            userService.authenticate(email, password);
+        }).isInstanceOf(EmailDoesNotExistedException.class);
+    }
+
+    @Test
+    void 비밀번호_오류_사용자_인증_서비스() {
+        String email = "tester@test.com";
+        String password = "x";
+
+        User mockUser = User.builder().email(email).build();
+        given(userRepository.findByEmail(email)).willReturn(Optional.of(mockUser));
+        given(passwordEncoder.matches(any(), any())).willReturn(false);
+
+        assertThatThrownBy(() -> {
+            userService.authenticate(email, password);
+        }).isInstanceOf(WrongPasswordException.class);
+    }
 }
 

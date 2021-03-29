@@ -1,6 +1,7 @@
 package kr.co.fastcampus.eatgore.interfaces;
 
 import kr.co.fastcampus.eatgore.applications.UserService;
+import kr.co.fastcampus.eatgore.domains.User;
 import kr.co.fastcampus.eatgore.domains.requests.SessionRequestDto;
 import kr.co.fastcampus.eatgore.domains.responses.SessionResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,13 +20,13 @@ public class SessionController {
     private UserService userService;
 
     @PostMapping("/session")
-    public ResponseEntity<SessionResponseDto> createWithSession(@RequestBody SessionRequestDto resource) throws URISyntaxException {
-        String accessToken = "ACCESS_TOKEN";
-
-        userService.authenticate(resource.getEmail(), resource.getPassword());
+    public ResponseEntity<SessionResponseDto> createWithSession(
+            @RequestBody SessionRequestDto resource
+    ) throws URISyntaxException {
+        User user = userService.authenticate(resource.getEmail(), resource.getPassword());
 
         SessionResponseDto sessionResponseDto = SessionResponseDto.builder()
-                .accessToken(accessToken)
+                .accessToken(user.getAuthToken())
                 .build();
 
         URI url = new URI("/session");

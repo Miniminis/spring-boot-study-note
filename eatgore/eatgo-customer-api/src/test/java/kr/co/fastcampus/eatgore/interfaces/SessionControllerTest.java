@@ -1,6 +1,7 @@
 package kr.co.fastcampus.eatgore.interfaces;
 
 import kr.co.fastcampus.eatgore.applications.UserService;
+import kr.co.fastcampus.eatgore.domains.User;
 import kr.co.fastcampus.eatgore.domains.exceptions.EmailDoesNotExistedException;
 import kr.co.fastcampus.eatgore.domains.exceptions.WrongPasswordException;
 import org.junit.jupiter.api.Test;
@@ -12,6 +13,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -28,14 +30,22 @@ class SessionControllerTest {
 
     @Test
     void 세션체크_유효한_데이터() throws Exception {
+        User mockUser = User.builder()
+                .email("tester@test.com")
+                .password("pass123456789")
+                .build();
+
+        given(userService.authenticate(mockUser.getEmail(), mockUser.getPassword()))
+                .willReturn(mockUser);
+
         mvc.perform(post("/session")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"email\":\"tester@test.com\", \"password\":\"tester1234\"}"))
+                .content("{\"email\":\"tester@test.com\", \"password\":\"pass123456789\"}"))
                 .andExpect(status().isCreated())
                 .andExpect(header().string("location", "/session"))
-                .andExpect(content().string("{\"accessToken\":\"ACCESS_TOKEN\"}"));
+                .andExpect(content().string("{\"accessToken\":\"pass123456\"}"));
 
-        verify(userService).authenticate("tester@test.com", "tester1234");
+        verify(userService).authenticate("tester@test.com", "pass123456789");
     }
 
     @Test

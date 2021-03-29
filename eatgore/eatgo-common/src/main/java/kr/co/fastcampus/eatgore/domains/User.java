@@ -38,4 +38,11 @@ public class User {
     public boolean isActivate() {
         return level > 0;
     }
+
+    public String getAuthToken() {
+        if (password == null) {
+            return null;
+        }
+        return password.substring(0, 10);
+    }
 }

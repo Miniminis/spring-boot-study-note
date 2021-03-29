@@ -22,7 +22,7 @@ public class SessionErrorAdvice {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(EmailDoesNotExistedException.class)
     public String handleBadRequestWithEmail() {
-        return "Password is wrong";
+        return "Email is already exist";
     }
 
 }
