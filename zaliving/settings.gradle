@@ -1,6 +1,0 @@
-rootProject.name = 'zaliving'
-include 'zaliving-common'
-include 'zaliving-customer-api'
-include 'zaliving-admin-api'
-include 'zaliving-web'
-
