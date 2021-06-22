@@ -1,10 +1,13 @@
 package com.example.batch.sample.part3;
 
+import io.micrometer.core.instrument.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
+import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
+import org.springframework.batch.core.configuration.annotation.JobScope;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.core.step.tasklet.Tasklet;
@@ -13,6 +16,7 @@ import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.support.ListItemReader;
 import org.springframework.batch.repeat.RepeatStatus;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -37,13 +41,15 @@ public class ChunkProcessingConfig {
         return jobBuilderFactory.get("chunkJob")
                 .incrementer(new RunIdIncrementer())
                 .start(this.taskBaseStep())
-                .next(this.chunkBaseStep())
+                .next(this.chunkBaseStep(null))     //null 로 파라미터 전달해도, 어차피 배치 실행시에 외부에서 주입받는 파라미터로 실행되므로 아무 상관이 없다.
                 .build();
     }
 
-    private Step chunkBaseStep() {
+    @Bean
+    @JobScope
+    public Step chunkBaseStep(@Value("#{jobParameters[chunkSize]}") String chunkSize) {
         return stepBuilderFactory.get("chunkBaseStep")
-                .<String, String>chunk(10)
+                .<String, String>chunk(StringUtils.isNotEmpty(chunkSize) ? Integer.parseInt(chunkSize) : 10)
                 .reader(itemReader())
                 .processor(itemProcessor())
                 .writer(itemWriter())
@@ -62,7 +68,8 @@ public class ChunkProcessingConfig {
         return new ListItemReader<>(getItems());
     }
 
-    private Step taskBaseStep() {
+    @Bean
+    public Step taskBaseStep() {
         return stepBuilderFactory.get("taskBaseStep")
                 .tasklet(this.tasklet())
                 .build();
@@ -73,8 +80,10 @@ public class ChunkProcessingConfig {
 
         return (contribution, chunkContext) -> {
             StepExecution stepExecution = contribution.getStepExecution();
+            JobParameters jobParameters = stepExecution.getJobParameters();
 
-            int chunkSize = 10;
+            String chunkSizeStr = jobParameters.getString("chunkSize", "10");
+            int chunkSize = StringUtils.isNotEmpty(chunkSizeStr) ? Integer.parseInt(chunkSizeStr) : 10;
             int fromIndex = stepExecution.getReadCount();
             int toIndex = fromIndex + chunkSize;
 
