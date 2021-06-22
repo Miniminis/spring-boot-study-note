@@ -37,6 +37,7 @@ public class SharedConfig {
     public Step sharedStep() {
         return stepBuilderFactory.get("sharedStep")
                 .tasklet((contribution, chunkContext) -> {
+
                     StepExecution stepExecution = contribution.getStepExecution();
                     ExecutionContext stepExecutionContext = stepExecution.getExecutionContext();
                     stepExecutionContext.put("stepKey", "step execution context");
