@@ -3,6 +3,7 @@ package com.example.batch.sample.part3;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
+import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
@@ -68,18 +69,32 @@ public class ChunkProcessingConfig {
     }
 
     private Tasklet tasklet() {
-        return (contribution, chunkContext) -> {
-            List<String> items = getItems();
-            log.info("item size : {}", items.size());
+        List<String> items = getItems();
 
-            return RepeatStatus.FINISHED;
+        return (contribution, chunkContext) -> {
+            StepExecution stepExecution = contribution.getStepExecution();
+
+            int chunkSize = 10;
+            int fromIndex = stepExecution.getReadCount();
+            int toIndex = fromIndex + chunkSize;
+
+            if (fromIndex >= items.size()) {
+                return RepeatStatus.FINISHED;
+            }
+
+            List<String> subList = items.subList(fromIndex, toIndex);
+            log.info("item size : {}", subList.size());
+
+            stepExecution.setReadCount(toIndex);
+
+            return RepeatStatus.CONTINUABLE;
         };
     }
 
     private List<String> getItems() {
         List<String> items = new ArrayList<>();
 
-        for (int i = 0; i < 101; i++) {
+        for (int i = 0; i < 100; i++) {
             items.add("Item " + i);
         }
 
