@@ -9,6 +9,7 @@ import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.JobScope;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
+import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.item.ItemProcessor;
@@ -71,18 +72,20 @@ public class ChunkProcessingConfig {
     @Bean
     public Step taskBaseStep() {
         return stepBuilderFactory.get("taskBaseStep")
-                .tasklet(this.tasklet())
+                .tasklet(this.tasklet(null))        //null 로 파라미터 전달해도, 어차피 배치 실행시에 외부에서 주입받는 파라미터로 실행되므로 아무 상관이 없다.
                 .build();
     }
 
-    private Tasklet tasklet() {
+    @Bean
+    @StepScope
+    public Tasklet tasklet(@Value("#{jobParameters[chunkSize]}") String chunkSizeStr) {
         List<String> items = getItems();
 
         return (contribution, chunkContext) -> {
             StepExecution stepExecution = contribution.getStepExecution();
             JobParameters jobParameters = stepExecution.getJobParameters();
 
-            String chunkSizeStr = jobParameters.getString("chunkSize", "10");
+//            String chunkSizeStr = jobParameters.getString("chunkSize", "10");
             int chunkSize = StringUtils.isNotEmpty(chunkSizeStr) ? Integer.parseInt(chunkSizeStr) : 10;
             int fromIndex = stepExecution.getReadCount();
             int toIndex = fromIndex + chunkSize;
