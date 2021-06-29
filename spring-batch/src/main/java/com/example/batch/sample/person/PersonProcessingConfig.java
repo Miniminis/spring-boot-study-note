@@ -39,16 +39,16 @@ public class PersonProcessingConfig {
     public Job personProcessingJob() {
         return jobBuilderFactory.get("personJob")
                 .incrementer(new RunIdIncrementer())
-                .start(this.changeAuthYnStep(null))
+                .start(this.changeAuthYnStep())
                 .build();
 
     }
 
     @Bean
     @JobScope
-    public Step changeAuthYnStep(@Value("#{jobParameters[chunkSize]}") String chunkSize) {
+    public Step changeAuthYnStep() {
         return stepBuilderFactory.get("changeAuthYnStep")
-                .<Person, Person>chunk(StringUtils.isNotEmpty(chunkSize) ? Integer.parseInt(chunkSize) : 10)
+                .<Person, Person>chunk(10)
                 .reader(changeAuthReader())
                 .writer(changeAuthWriter())
                 .build();
@@ -57,9 +57,20 @@ public class PersonProcessingConfig {
     private ItemWriter<Person> changeAuthWriter() {
         return items -> {
             for (Person item : items) {
-                log.info("personName : {}", item.getName());
-                item.setName("김무개");
-                item.setAuthYn("Y");
+                if (item.getName().equals("손무개")) {
+                    item.setName("남무개");
+                } else {
+                    item.setName("손무개");
+                }
+
+                if(item.getAuthYn() == null) {
+                    item.setAuthYn("N");
+                } else if (item.getAuthYn().equals("Y")) {
+                    item.setAuthYn("N");
+                } else {
+                    item.setAuthYn("Y");
+                }
+
                 personRepository.save(item);
             }
         };
