@@ -29,14 +29,14 @@ public class PersonScheduler {
         this.personProcessingConfig = personProcessingConfig;
     }
 
-    @Scheduled(cron = "0/10 * * * * ?")
+    @Scheduled(cron = "0 0 0 1 * ?")
     public void updateAuthStatusJob() throws JobParametersInvalidException, JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException {
-        Map<String, JobParameter> confMap = new HashMap<>();
-        confMap.put("time", new JobParameter(System.currentTimeMillis()));
-        JobParameters jobParameters = new JobParameters(confMap);
-
-        jobLauncher.run(personProcessingConfig.personProcessingJob(), jobParameters);
-//        log.info("10초마다 한번씩 실행");
+//        Map<String, JobParameter> confMap = new HashMap<>();
+//        confMap.put("time", new JobParameter(System.currentTimeMillis()));
+//        JobParameters jobParameters = new JobParameters(confMap);
+//
+//        jobLauncher.run(personProcessingConfig.personProcessingJob(), jobParameters);
+        log.info("매월 1일 한번씩 실행");
     }
 
 }
