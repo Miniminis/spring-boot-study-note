@@ -1,4 +1,4 @@
-package com.example.batch.sample.part2;
+package com.example.batch.sample.part2context;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.*;
@@ -78,6 +78,5 @@ public class SharedConfig {
                     return RepeatStatus.FINISHED;
                 })
                 .build();
-
     }
 }

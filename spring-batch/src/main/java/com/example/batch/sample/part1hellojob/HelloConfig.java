@@ -1,4 +1,4 @@
-package com.example.batch.sample.part1;
+package com.example.batch.sample.part1hellojob;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;

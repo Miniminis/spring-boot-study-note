@@ -1,9 +1,6 @@
 package com.example.batch.sample.domains;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -25,6 +22,8 @@ public class Person {
     private String name;
 
     private Integer age;
+
+    private String address;
 
     private String authYn;
 
