@@ -29,4 +29,10 @@ public class Person {
 
     private LocalDateTime createDate;
 
+    public Person(Long id, String name, Integer age, String address) {
+        this.id = id;
+        this.name = name;
+        this.age = age;
+        this.address = address;
+    }
 }
