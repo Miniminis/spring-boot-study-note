@@ -1,12 +1,32 @@
 spring:
+  config:
+    activate:
+      on-profile: h2
   batch:
     job:
       names: ${job.name:NONE}
     jdbc:
-      initialize-schema: never
+      initialize-schema: always
+  datasource:
+    url: jdbc:h2:mem:person
+    driver-class-name: org.h2.Driver
+#  sql:
+#    init:
+#      data-locations: classpath:person.sql
+
+---
+spring:
+  config:
+    activate:
+      on-profile: mysql
+  batch:
+    job:
+      names: ${job.name:NONE}
+    jdbc:
+        initialize-schema: never
   datasource:
     hikari:
-      jdbc-url: jdbc:mysql://localhost:3306/spring_batch?charactorEncoding=UTF-8&serverTimeZone=UTC
       driver-class-name: com.mysql.cj.jdbc.Driver
+      jdbc-url: jdbc:mysql://localhost:3306/spring_batch?charactorEncoding=UTF-8&serverTimeZone=UTC
       username: root
       password: admin
