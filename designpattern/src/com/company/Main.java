@@ -1,10 +1,10 @@
 package com.company;
 
-import com.company.singleton.MainSingleton;
+import com.company.adapter.MainAdapter;
 
 public class Main {
 
     public static void main(String[] args) {
-        MainSingleton.run();
+        MainAdapter.run();
     }
 }
