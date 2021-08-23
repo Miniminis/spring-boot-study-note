@@ -1,12 +1,14 @@
 package com.company.encoder;
 
-import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
-
-import java.nio.charset.StandardCharsets;
-
 public class Encoder {
 
+    private IEncoder iEncoder;
+
+    public Encoder(IEncoder encoder) {
+        this.iEncoder = encoder;
+    }
+
     public String encode(String message) {
-        return Base64.encode(message.getBytes(StandardCharsets.UTF_8));
+        return iEncoder.encode(message);
     }
 }
