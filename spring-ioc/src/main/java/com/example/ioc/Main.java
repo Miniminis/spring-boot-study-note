@@ -1,8 +1,8 @@
-package com.company;
+package com.example.ioc;
 
-import com.company.encoder.Base64Encoder;
-import com.company.encoder.Encoder;
-import com.company.encoder.UrlEncoder;
+import com.example.ioc.encoders.Base64Encoder;
+import com.example.ioc.encoders.Encoder;
+import com.example.ioc.encoders.UrlEncoder;
 
 public class Main {
 
