@@ -14,7 +14,6 @@ public class Encoder {
          * -> qualifier 를 설정해주어 어떤 bean 을 주입해줄 것인지 해결한다.
          * */
 
-
         this.iEncoder = encoder;
     }
 
