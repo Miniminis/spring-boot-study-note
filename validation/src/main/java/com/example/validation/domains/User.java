@@ -1,9 +1,13 @@
 package com.example.validation.domains;
 
-import javax.validation.constraints.*;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import com.example.validation.annotations.YearMonth;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import javax.validation.Valid;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Pattern;
+import java.util.List;
 
 public class User {
 
@@ -16,20 +20,15 @@ public class User {
     private String email;   //Bad Request
 
     @Pattern(regexp = "^\\d{2,3}-\\d{3,4}-\\d{4}$")
+    @JsonProperty(value = "phone_number")
     private String phoneNumber;
 
-    @Size(min = 6, max = 6)
+    @YearMonth
+    @JsonProperty(value = "req_month")
     private String reqMonth;        //yyyyMM
 
-    @AssertTrue(message = "yyyyMM 형식에 맞지 않습니다.")
-    public boolean isReqMonthValid() {
-        try {
-            LocalDate localDate = LocalDate.parse(getReqMonth()+"01", DateTimeFormatter.ofPattern("yyyyMMdd"));
-        } catch (Exception e) {
-            return false;
-        }
-        return true;
-    }
+    @Valid
+    private List<Car> cars;
 
     public String getName() {
         return name;
@@ -71,6 +70,14 @@ public class User {
         this.reqMonth = reqMonth;
     }
 
+    public List<Car> getCars() {
+        return cars;
+    }
+
+    public void setCars(List<Car> cars) {
+        this.cars = cars;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -79,6 +86,7 @@ public class User {
                 ", email='" + email + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", reqMonth='" + reqMonth + '\'' +
+                ", cars=" + cars +
                 '}';
     }
 }

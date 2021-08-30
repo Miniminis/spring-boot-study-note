@@ -28,7 +28,7 @@ public class ApiController {
                 System.out.println(field.getField());
                 System.out.println(errmsg);
 
-                sb.append(field.getField());
+//                sb.append(field.getField());
                 sb.append(errmsg);
             });
 
