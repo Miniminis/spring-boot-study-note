@@ -1,19 +1,25 @@
 package com.example.exception.controllers;
 
 import com.example.exception.dtos.User;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @RestController
 @RequestMapping("/api/user")
+@Validated
 public class ApiController {
 
     @GetMapping("")
-    public User get(@RequestParam String name,
+    public User get(@Size(min = 2)
+                    @RequestParam String name,
+
+                    @NotNull
+                    @Min(1)
                     @RequestParam(required = false) Integer age) {
 
         User user = new User();
@@ -30,13 +36,6 @@ public class ApiController {
     public User post(@Valid @RequestBody User user) {
         System.out.println(user);
         return user;
-    }
-
-    @ExceptionHandler(value = MethodArgumentNotValidException.class)
-    public ResponseEntity methodArgumentNotValidExceptionHandler(MethodArgumentNotValidException e) {
-        System.out.println("local message in controller : " + e.getLocalizedMessage());
-
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("MethodArgumentNotValidException!");
     }
 
 }
