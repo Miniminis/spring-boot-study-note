@@ -1,18 +1,17 @@
 package com.example.filter.filters;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 import org.springframework.web.util.ContentCachingResponseWrapper;
 
 import javax.servlet.*;
+import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedReader;
 import java.io.IOException;
 
 @Slf4j
-@Component      //spring 에 의해서 관리될 수 있도록 추가
+@WebFilter(urlPatterns = { "/api/user/*" })
 public class GlobalFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request,
