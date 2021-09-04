@@ -36,7 +36,7 @@ public class RestApiService {
         return "hello, world!";
     }
 
-    @Async
+    @Async("async-thread")
     public CompletableFuture requestCompletedFuture() {
         return new AsyncResult(requestNormal()).completable();
     }
