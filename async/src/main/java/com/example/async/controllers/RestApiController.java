@@ -5,6 +5,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.concurrent.CompletableFuture;
+
 @RestController
 @RequestMapping("/api")
 public class RestApiController {
@@ -22,8 +24,14 @@ public class RestApiController {
     }
 
     @GetMapping("/normal")
-    public String requestNormalAnnotation() {
+    public String requestNormal() {
         restApiService.requestNormal();
         return "hello world!";
     }
+
+    @GetMapping("/completable-future")
+    public CompletableFuture requestCompletableFuture() {
+        return restApiService.requestCompletedFuture();
+    }
+
 }

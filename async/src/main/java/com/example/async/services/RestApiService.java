@@ -1,7 +1,10 @@
 package com.example.async.services;
 
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
+
+import java.util.concurrent.CompletableFuture;
 
 @Service
 public class RestApiService {
@@ -19,7 +22,7 @@ public class RestApiService {
         }
     }
 
-    public void requestNormal() {
+    public String requestNormal() {
 
         for (int i = 0; i < 10; i++) {
             try {
@@ -29,6 +32,13 @@ public class RestApiService {
                 e.printStackTrace();
             }
         }
+
+        return "hello, world!";
+    }
+
+    @Async
+    public CompletableFuture requestCompletedFuture() {
+        return new AsyncResult(requestNormal()).completable();
     }
 
 }
