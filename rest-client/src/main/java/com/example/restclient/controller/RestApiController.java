@@ -15,7 +15,12 @@ public class RestApiController {
     private final RestApiService restApiService;
 
     @GetMapping("/get")
-    public ResponseEntity request() {
-        return restApiService.requestRestApiServer();
+    public ResponseEntity requestGet() {
+        return restApiService.requestGetApiServer();
+    }
+
+    @GetMapping("/post")
+    public ResponseEntity requestPost() {
+        return restApiService.requestPostApiServer();
     }
 }

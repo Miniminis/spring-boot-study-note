@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriBuilderFactory;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
@@ -14,7 +15,7 @@ import java.net.URI;
 @Slf4j
 public class RestApiService {
 
-    public ResponseEntity requestRestApiServer() {
+    public ResponseEntity requestGetApiServer() {
         URI uri = UriComponentsBuilder.fromUriString("http://localhost:9090")
                 .path("/api/server/get")
                 .queryParam("name", "porori")
@@ -46,5 +47,29 @@ public class RestApiService {
 
 
         return ResponseEntity.status(HttpStatus.OK).body(userResponseEntityBody);
+    }
+
+    public ResponseEntity requestPostApiServer() {
+        URI uri = UriComponentsBuilder.fromUriString("http://localhost:9090/api/server")
+                .path("/post/name/{name}/age/{age}")
+                .encode()
+                .build()
+                .expand("hong", 34)
+                .toUri();
+        log.info("Uri : {}", uri);
+
+        User user = new User();
+        user.setName("Hong gil dong");
+        user.setAge(12);
+
+
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<User> response = restTemplate.postForEntity(uri, user, User.class);
+
+        log.info("statusCode : {}", response.getStatusCode());
+        log.info("headers : {}", response.getHeaders());
+        log.info("body : {}", response.getBody());
+
+        return ResponseEntity.status(HttpStatus.OK).body(response.getBody());
     }
 }
