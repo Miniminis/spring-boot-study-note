@@ -1,5 +1,6 @@
 package com.example.restserver.controllers;
 
+import com.example.restserver.dtos.RequestDto;
 import com.example.restserver.dtos.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -34,9 +35,9 @@ public class RestApiController {
     }
 
     @PostMapping("/exchange/name/{name}/age/{age}")
-    public ResponseEntity exchange(@PathVariable String name,
+    public ResponseEntity<RequestDto<User>> exchange(@PathVariable String name,
                                    @PathVariable int age,
-                                   @RequestBody User user,
+                                   @RequestBody RequestDto<User> user,
                                    @RequestHeader("x-authorization") String authorization,
                                    @RequestHeader("custom-header") String customHeader) {
 

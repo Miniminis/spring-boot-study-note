@@ -1,7 +1,9 @@
 package com.example.restclient.services;
 
+import com.example.restclient.dtos.RequestDto;
 import com.example.restclient.dtos.User;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
@@ -11,6 +13,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriBuilderFactory;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.lang.reflect.ParameterizedType;
 import java.net.URI;
 
 @Service
@@ -104,5 +107,44 @@ public class RestApiService {
         log.info("body : {}", response.getBody());
 
         return ResponseEntity.status(HttpStatus.OK).body(response.getBody());
+    }
+
+    public ResponseEntity<RequestDto<User>> requestGenericReqApiServer() {
+        URI uri = UriComponentsBuilder.fromUriString("http://localhost:9090/api/server")
+                .path("/exchange/name/{name}/age/{age}")
+                .encode()
+                .build()
+                .expand("hong", 34)
+                .toUri();
+        log.info("Uri : {}", uri);
+
+        User user = new User();
+        user.setName("Hong gil dong");
+        user.setAge(12);
+
+        RequestDto<User> requestDto = new RequestDto<>();
+        requestDto.setHeader(new RequestDto.Header(200));
+        requestDto.setReqBody(user);
+
+
+        RequestEntity<RequestDto<User>> requestEntity = RequestEntity
+                .post(uri)
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("x-authorization", "AUTHORIZED")
+                .header("custom-header", "hello~")
+                .body(requestDto);
+
+
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<RequestDto<User>> response = restTemplate.exchange(
+                requestEntity,
+                new ParameterizedTypeReference<RequestDto<User>>(){});
+
+        log.info("statusCode : {}", response.getStatusCode());
+        log.info("headers : {}", response.getHeaders());
+        log.info("body : {}", response.getBody());
+
+        return ResponseEntity.status(HttpStatus.OK).body(response.getBody());
+
     }
 }

@@ -1,5 +1,7 @@
 package com.example.restclient.controller;
 
+import com.example.restclient.dtos.RequestDto;
+import com.example.restclient.dtos.User;
 import com.example.restclient.services.RestApiService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +29,11 @@ public class RestApiController {
     @GetMapping("/exchange")
     public ResponseEntity requestExchange() {
         return restApiService.requestExchangeApiServer();
+    }
+
+    @GetMapping("/generic")
+    public ResponseEntity<RequestDto<User>> requestGeneric() {
+        return restApiService.requestGenericReqApiServer();
     }
 
 }
