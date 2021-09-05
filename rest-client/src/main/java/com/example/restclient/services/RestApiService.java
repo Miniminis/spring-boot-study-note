@@ -3,6 +3,8 @@ package com.example.restclient.services;
 import com.example.restclient.dtos.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -65,6 +67,37 @@ public class RestApiService {
 
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<User> response = restTemplate.postForEntity(uri, user, User.class);
+
+        log.info("statusCode : {}", response.getStatusCode());
+        log.info("headers : {}", response.getHeaders());
+        log.info("body : {}", response.getBody());
+
+        return ResponseEntity.status(HttpStatus.OK).body(response.getBody());
+    }
+
+    public ResponseEntity requestExchangeApiServer() {
+        URI uri = UriComponentsBuilder.fromUriString("http://localhost:9090/api/server")
+                .path("/exchange/name/{name}/age/{age}")
+                .encode()
+                .build()
+                .expand("hong", 34)
+                .toUri();
+        log.info("Uri : {}", uri);
+
+        User user = new User();
+        user.setName("Hong gil dong");
+        user.setAge(12);
+
+        RequestEntity<User> requestEntity = RequestEntity
+                .post(uri)
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("x-authorization", "AUTHORIZED")
+                .header("custom-header", "hello~")
+                .body(user);
+
+
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<User> response = restTemplate.exchange(requestEntity, User.class);
 
         log.info("statusCode : {}", response.getStatusCode());
         log.info("headers : {}", response.getHeaders());

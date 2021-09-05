@@ -23,4 +23,10 @@ public class RestApiController {
     public ResponseEntity requestPost() {
         return restApiService.requestPostApiServer();
     }
+
+    @GetMapping("/exchange")
+    public ResponseEntity requestExchange() {
+        return restApiService.requestExchangeApiServer();
+    }
+
 }

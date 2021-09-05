@@ -33,4 +33,21 @@ public class RestApiController {
         return ResponseEntity.status(HttpStatus.OK).body(user);
     }
 
+    @PostMapping("/exchange/name/{name}/age/{age}")
+    public ResponseEntity exchange(@PathVariable String name,
+                                   @PathVariable int age,
+                                   @RequestBody User user,
+                                   @RequestHeader("x-authorization") String authorization,
+                                   @RequestHeader("custom-header") String customHeader) {
+
+        log.info("rest-server post called");
+        log.info("name : {}", name);
+        log.info("age : {}", age);
+
+        log.info("header 1 : {}", authorization);
+        log.info("header 2 : {}", customHeader);
+
+        return ResponseEntity.status(HttpStatus.OK).body(user);
+    }
+
 }
